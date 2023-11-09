@@ -3,7 +3,8 @@ const blog = mongoose.Schema({
     author: String,
     title: String,
     body: String,
-    DatePubllshed: Date
+    DatePubllshed: Date,
+    comments: [String]
 })
 const Blog = mongoose.model('Blog',blog);
 module.exports = Blog;

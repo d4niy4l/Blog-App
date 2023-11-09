@@ -10,7 +10,8 @@ const SubmitBlog = async(req,res)=>{
             author: author,
             body: body,
             DatePublished: new Date(),
-            title: title
+            title: title,
+            comments: []
         })
         await blog.save();
         console.log('hiii');
