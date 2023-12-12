@@ -84,7 +84,7 @@ export default function SignForm(){
         }
     }
     return(
-        <div className='bg-gradient-to-tl from-violet-900 via-gray-800 to-red-700 shadow-md rounded-lg px-6 py-4 w-full max-w-sm'>
+        <div className='bg-gradient-to-tl from-violet-900 via-gray-800 to-red-700 shadow-md rounded-lg px-5 py-3 w-full max-w-sm'>
             <div className='flex flex-col gap-6'>
                 <div className = 'text-white  flex flex-col align-middle items-center gap-3 '>
                     <img src = {logo} width = "10%" height = "10%"/>    

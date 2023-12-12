@@ -6,6 +6,10 @@ export function CommentBoxTextarea(props) {
     const {value} = event.target;
     setComment(value);
   }
+  const post = (event) => {
+      event.preventDefault();
+      
+  }
   return (
     <div className="relative px-10 w-full">
     <textarea onChange = {change} placeholder="Your Comment" maxLength={100} minLength={10} className="rounded-lg outline-none border-none focus:scale-105 transition-all  w-full text-white" style={{background: 'rgb(52, 61, 61)'}}/>

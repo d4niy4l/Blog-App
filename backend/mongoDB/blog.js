@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
-const blog = mongoose.Schema({
+const Comment = require('./comments');
+
+const blogSchema = mongoose.Schema({
     author: String,
     title: String,
     body: String,
-    DatePubllshed: Date,
-    comments: [String]
-})
-const Blog = mongoose.model('Blog',blog);
+    DatePublished: Date, 
+    comments: [Comment.schema]
+});
+
+const Blog = mongoose.model('Blog', blogSchema);
+
 module.exports = Blog;

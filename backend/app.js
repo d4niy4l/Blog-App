@@ -5,6 +5,7 @@ const login = require('./routes/login');
 const post_blog = require('./routes/blog');
 const signup = require('./routes/signup');
 const get_one_blog = require('./routes/oneBlog');
+const addComment = require('./routes/commentAdd');
 require('dotenv').config();
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -28,3 +29,4 @@ app.use('/login',login);
 app.use('/signup',signup);
 app.use('/post-blog',post_blog);
 app.use('/oneblog',get_one_blog);
+app.use('add/comment',addComment);
