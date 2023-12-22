@@ -12,7 +12,7 @@ export default function BlogCard(props) {
         navigate(`/Blogs?title=${encodeURIComponent(props.title)}`);
     }
 return (
-    <Card className="p-2 lg:w-800 md:w-600 sm:w-300 hover:scale-105 transition-all overflow-hidden">
+    <Card className="p-2 lg:w-800 md:w-600 sm:w-300 hover:scale-105 transition-all hover:overflow-hidden">
     <CardBody>
         <Typography variant="h5" color="blue-gray" className="mb-2">
         {props.title}

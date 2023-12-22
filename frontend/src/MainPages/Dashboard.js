@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import {useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import BlogCard  from "../Components/BlogCard";
+import Footer from "../Components/Footer";
 export default function DashBoard(props){
     const navigate = useNavigate();
     const location = useLocation();
@@ -126,7 +127,7 @@ export default function DashBoard(props){
             return <BlogCard body = {val.body} title = {val.title} author = {val.author}/>
         })}
   </div>
-
+    <Footer/>
 </div>
 
     )
