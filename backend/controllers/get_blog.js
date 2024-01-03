@@ -1,12 +1,12 @@
 const Blog = require('./../mongoDB/blog');
-const User = require('./../mongoDB/users')
+const User = require('./../mongoDB/users');
 const mongoose = require('mongoose');
 const getBlogs = async (req,res)=>{
     try{
-        const {username} = req.query;
-        user = await User.find({username: username});
+        const {author} = req.query;
+        user = await User.find({username: author});
         if(user.length === 0) return res.status(404).json({message: 'USER NOT FOUND'});
-        const blogs = await Blog.find({author: username});
+        const blogs = await Blog.find({author: author});
         return res.status(200).json({blogs: blogs});
     }
     catch(err){

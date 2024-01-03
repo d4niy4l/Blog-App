@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const defaultTheme = require('tailwindcss/defaultTheme');
+const plugin = require('tailwindcss/plugin')
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -23,6 +24,24 @@ module.exports = {
   },
 
   darkMode: "class",
-  plugins: [require('flowbite/plugin')],
+  plugins: [require('flowbite/plugin'),
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          /* IE and Edge */
+          '-ms-overflow-style': 'none',
+
+          /* Firefox */
+          'scrollbar-width': 'none',
+
+          /* Safari and Chrome */
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          }
+        }
+      }
+      )
+    })            
+],
 }
 

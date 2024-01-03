@@ -10,7 +10,7 @@ import logo from './../authPage/logo.png'
 export default function Footer(){
    
     return(
-        <div class = 'bg-black flex flex-col w-full h-fit'>
+        <div className = 'bg-black flex flex-col w-full h-fit'>
             <div className="flex flex-col text-white align-middle justify-center gap-2"> 
                 <div className="flex md:flex-row xxs:flex-col p-3 gap-6 align-middle justify-center"> 
                     <div className="flex flex-row gap-3 md:border-r-4 border-white px-3 align-middle justify-center">

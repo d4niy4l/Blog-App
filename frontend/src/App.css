@@ -9,3 +9,33 @@
 body{
   background-color: #191919
 }
+.matchColor{
+  background-color: #313131
+}
+body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+  border-radius: 4px;
+}
+
+body::-webkit-scrollbar-track, div::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  -webkit-box-sizing: initial;
+}
+
+body::-webkit-scrollbar, div::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+/* For Firefox */
+body, div {
+  scrollbar-width: thin;
+  scrollbar-color: darkgrey slategrey;
+}
+
+/* For Firefox */
+div {
+  scrollbar-width: thin;
+  scrollbar-color: darkgrey slategrey;
+}
+

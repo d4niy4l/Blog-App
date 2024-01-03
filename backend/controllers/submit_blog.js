@@ -1,5 +1,6 @@
 const Blog = require('./../mongoDB/blog');
 const User = require('./../mongoDB/users');
+const { v4: UUIDV4 } = require('uuid');
 const SubmitBlog = async(req,res)=>{
     try{
         const{title,author,body} = req.body;
@@ -7,6 +8,7 @@ const SubmitBlog = async(req,res)=>{
         const user = await User.find({username: author});
         if(!user.length) return res.status(400).json({message: 'Input Error'});
         const blog = new Blog({
+            id: UUIDV4(),
             author: author,
             body: body,
             DatePublished: new Date(),
@@ -14,7 +16,6 @@ const SubmitBlog = async(req,res)=>{
             comments: []
         })
         await blog.save();
-        console.log('hiii');
         res.status(200).json({message: 'Blog posted successfully'})
     }
     catch(err){

@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
-const Comment = require('./comments');
+
 
 const blogSchema = mongoose.Schema({
+    id: String,
     author: String,
     title: String,
     body: String,
     DatePublished: Date, 
-    comments: [Comment.schema]
+    comments: [{body: String, author: String, date: Date}]
 });
 
 const Blog = mongoose.model('Blog', blogSchema);
