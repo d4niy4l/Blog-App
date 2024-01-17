@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const User = require('./../mongoDB/users');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const session_age = 3 * 24 * 60 * 60;
+const session_age = 100 * 24 * 60 * 60;
 const create_token = (id) =>{
   return jwt.sign({id},"my-32-character-ultra-secure-and-ultra-long-secret",{
     expiresIn: session_age

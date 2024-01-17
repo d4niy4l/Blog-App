@@ -32,6 +32,7 @@ export function CommentBoxTextarea(props) {
       console.log(result);
       if(result.status){
         textbox.current.value = "";
+        props.setNumber(props.number + 1);
       }
       else{
         console.log('error');

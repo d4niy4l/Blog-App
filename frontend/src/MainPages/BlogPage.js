@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect,useState,useCallback, useRef } from "react";
 import UserNavbar from "../Components/UserNavbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card, Button } from "@material-tailwind/react";
@@ -8,13 +8,19 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import {GoComment} from 'react-icons/go'
 import { IconContext } from "react-icons";
 import VerifyUser from "../authPage/VerifyUserHook";
-import { Pagination } from "../Components/Pagination";
 import {GiNotebook} from 'react-icons/gi'
 import Footer from "../Components/Footer";
+import {debounce} from 'lodash'
+import CommentCard from "../Components/CommentCard";
 export default function BlogPage(){
     const [cookie] = useCookies([]);
     const [error,setError] = useState(false);
-    const [refreshCount, setRefreshCount] = useState(0);
+    const footer = useRef();
+    const container = useRef();
+    const [comments, setComments] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [offset, setOffset] = useState(5);
+    const [numberComments,setNumberComments] = useState(0);
     const navigate = useNavigate();
     const [blog, setBlog] = useState({
         author: '',
@@ -26,7 +32,37 @@ export default function BlogPage(){
     const query = new URLSearchParams(location.search);
     const id = query.get('id');
     const goBack= () => navigate(-1);
-  
+    const fetchData = useCallback(async () => {
+        if (isLoading) return;
+        setIsLoading(true);
+        const res = await fetch(`http://localhost:5000/comment?offset=${offset}&id=${encodeURIComponent(id)}`,{
+            method: 'GET',
+        });
+        const commentObj = await res.json();
+        if(commentObj.end <= numberComments){
+            setComments((prev)=>[...prev,...commentObj.items]);
+            setOffset(commentObj.end);
+        }
+        setIsLoading(false);
+      }, [offset, isLoading]);
+      const debouncedFetchData = useCallback(debounce(fetchData, 300), [fetchData]);
+    useEffect(() => {
+    const getData = async () => {
+        setIsLoading(true);
+        try{
+            const res = await fetch(`http://localhost:5000/comment?id=${encodeURIComponent(id)}`,{
+                method: 'GET',
+            });
+                const commentObj = await res.json();
+                setComments(commentObj.items);
+            } 
+            catch (error) {
+            console.log('error:', error);
+            }
+            setIsLoading(false);
+    };
+    getData();
+    }, []);
     useEffect(()=>{
         const getBlog = async()=>{
             if(!cookie.jwt) navigate('/Login');
@@ -39,9 +75,8 @@ export default function BlogPage(){
                     return;
                 }
                 const result = await res.json();
-                console.log(result);
                 setBlog(result.blog);
-                console.log(blog);
+                setNumberComments(result.blog.comments.length);
             }
             catch(err){
                 setError(true);
@@ -50,6 +85,19 @@ export default function BlogPage(){
         }
         getBlog();
     },[])
+
+    useEffect(() => {
+        const handleScroll = () => {
+            //const container = footer;
+            if (container.current.scrollTop + container.current.clientHeight >= container.current.scrollHeight) {
+              debouncedFetchData();
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+          window.removeEventListener("scroll", handleScroll);
+        };
+      }, [fetchData]);
     VerifyUser();
     return(
         <div className="flex flex-col align-middle justify-center overflow-x-hidden">
@@ -81,22 +129,26 @@ export default function BlogPage(){
                             <GoComment color="yellow"/>
                         </IconContext.Provider>
                     </div>
-                        <CommentBoxTextarea id = {blog.id}/>
+                        <CommentBoxTextarea id = {blog.id} setNumber = {setNumberComments} number = {numberComments}/>
                         <div></div>
                 </Card>
                
                 <div className = "bg-cover bg-center w-full p-3"  //style={{backgroundImage: `url('https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3Y4ODAtdGVjaGktMDgtam9iNTk4LmpwZw.jpg')`}}
                 >
-                    <h1 className="text-2xl py-5 text-white"><b>{blog.comments.length === 0 ? "NO COMMENTS YET" : `${blog.comments.length} COMMENTS`}</b></h1>
+                    <h1 className="text-2xl py-5 text-white"><b>{numberComments === 0 ? "NO COMMENTS YET" : `${numberComments} COMMENTS`}</b></h1>
                 </div>
             </div>
-            {//blog.comments.length > 0 && <Pagination arr = {blog.comments} item = 'comments'></Pagination>
-            }
+            <div className="flex flex-col gap-5 p-4" ref = {container}>
+                {numberComments > 0 && comments.map((val)=>{
+                    return <CommentCard body = {val.body} author = {val.author} date = {val.date}/>
+                })}  
+            </div>
             <div className="flex flex-row justify-center align-middle items-center p-7">
                 <Button className="flex flex-row gap-2 align-middle justify-center items-center" onClick={goBack}>
                     <IoIosArrowRoundBack className="text-white"/>
                     <p>BACK</p>
                 </Button>
+            <div></div>
             </div>
             <Footer/>
         </div>
