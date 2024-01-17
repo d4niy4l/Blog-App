@@ -5,8 +5,8 @@ import { useState, useRef, useEffect } from "react";
 import {useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import BlogCard  from "../Components/BlogCard";
-import { FaTrashCan } from 'react-icons/fa6';
 import Footer from "../Components/Footer";
+import VerifyUser from "../authPage/VerifyUserHook";
 export default function DashBoard(props){
     const navigate = useNavigate();
     const location = useLocation();
@@ -47,6 +47,7 @@ export default function DashBoard(props){
       console.error(err);
     }
   }
+   VerifyUser(); 
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -116,7 +117,7 @@ export default function DashBoard(props){
     }
     console.log(data[0]?.id);
     return( 
-  <div className="flex flex-col align-middle items-center justify-center gap-5 overflow-x-hidden">
+  <div className="flex flex-col overflow-x-hidden gap-5 w-screen">
   <UserNavbar />
   <div className="flex md:flex-row xxs:flex-col w-screen gap-5 justify-center align-middle">
     <div className="flex flex-col justify-center align-middle gap-3">

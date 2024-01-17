@@ -1,5 +1,7 @@
 import React from "react";
 import logo from './../authPage/logo.png'
+import {useCookies} from 'react-cookie';
+import {useNavigate} from 'react-router-dom';
 import {VscArrowUp} from 'react-icons/vsc'
 import {
   Navbar,
@@ -34,8 +36,13 @@ const profileMenuItems = [
 ];
  
 function ProfileMenu() {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
- 
+  const [cookies,setCookie,removeCookie] = useCookies([]);
+  function Logout(){
+      removeCookie("jwt");
+      navigate("/login");
+  };
   const closeMenu = () => setIsMenuOpen(false);
  
   return (
@@ -58,28 +65,30 @@ function ProfileMenu() {
         {profileMenuItems.map(({ label, icon }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
-            <MenuItem
-              key={label}
-              onClick={closeMenu}
-              className={`flex items-center gap-2 rounded bg-slate-700 ${
-                isLastItem
-                  ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
-              }`}
-            >
-              {React.createElement(icon, {
-                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                strokeWidth: 2,
-              })}
-              <Typography
-                as="span"
-                variant="small"
-                className="font-normal"
-                color={isLastItem ? "red" : "inherit"}
+           
+              <MenuItem
+                key={label}
+                onClick={isLastItem ? Logout : closeMenu}
+                className={`flex items-center gap-2 rounded matchColor ${
+                  isLastItem
+                    ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                    : ""
+                }`}
               >
-                {label}
-              </Typography>
-            </MenuItem>
+                {React.createElement(icon, {
+                  className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+                  strokeWidth: 2,
+                })}
+                <Typography
+                  as="span"
+                  variant="small"
+                  className="font-normal"
+                  color={isLastItem ? "red" : "inherit"}
+                >
+                  {label}
+                </Typography>
+              </MenuItem>
+        
           );
         })}
       </MenuList>
@@ -181,7 +190,7 @@ export default function UserNavbar() {
   }, []);
  
   return (
-    <Navbar className="bg-gradient-to-t from-violet-900 via-gray-800 to-red-700 w-screen p-5 lg:pl-6 border-none overflow-x-hidden">
+    <Navbar className="w-screen min-w-full bg-gradient-to-t from-violet-900 via-gray-800 to-red-700 border-none">
       <div className="relative mx-auto flex items-center justify-around text-blue-gray-900">
         <Typography
           as="a"

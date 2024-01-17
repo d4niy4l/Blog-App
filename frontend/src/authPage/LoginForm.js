@@ -3,10 +3,12 @@ import { useState, useRef } from 'react';
 import logo from './logo.png'
 import { Link,useNavigate } from 'react-router-dom';
 import {Input, Button} from '@material-tailwind/react'
+import {useCookies} from 'react-cookie';
 import React from "react";
 
 export default function LoginForm(props){
     const navigate = useNavigate();
+    const [cookies,setCookies] = useCookies([]);
     const[exists,setExist] = useState('');
     const username = useRef(null);
     const password = useRef(null);
@@ -21,24 +23,27 @@ export default function LoginForm(props){
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify(formData)
             })
+            console.log('poop');
             const result = await res.json();
             if(res.status === 409){
-                console.log('hi');
+                console.log('error in login');
                 setExist(result.message);
             }
             else if (res.status === 200){
                 setExist("");
                 props.log(true);
-                props.setLogged(result);
+               // props.setLogged(result);
                 console.log(props.logged);
-                localStorage.setItem("user",JSON.stringify(result));
-                navigate(`/DashBoard?username=${encodeURIComponent(result.username)}`);
+                //localStorage.setItem("user",JSON.stringify(result));
+                //console.log("data: ",result);
+                navigate(`/DashBoard?username=${encodeURIComponent(result.username)}&id=${encodeURIComponent(result.id)}`);
             }
         }
         catch(error){
-            console.log('ppoop');
+            console.log('server error');
             setExist("SERVER ERROR");
             console.error('Error',error);
         }
