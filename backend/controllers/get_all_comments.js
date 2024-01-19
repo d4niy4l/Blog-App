@@ -9,9 +9,7 @@ const get_all_comments = async (req,res)=>{
         const blog = await Blog.findOne({id:blog_id});
         const size = blog.comments.length;
         const end = Math.min(offset + limit, size);
-        if(offset == size) return res.json({items: [],end:end}); 
         const comments = blog.comments.slice(offset, end);
-        console.log(end,offset);
         res.json({items: comments,end:end}); 
     }
     catch(err){

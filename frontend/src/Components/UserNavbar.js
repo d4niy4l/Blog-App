@@ -2,7 +2,8 @@ import React from "react";
 import logo from './../authPage/logo.png'
 import {useCookies} from 'react-cookie';
 import {useNavigate} from 'react-router-dom';
-import {VscArrowUp} from 'react-icons/vsc'
+import {VscArrowUp} from 'react-icons/vsc';
+import {useEffect,useState} from 'react'
 import {
   Navbar,
   Collapse,
@@ -12,22 +13,16 @@ import {
   MenuHandler,
   MenuList,
   MenuItem,
-  Avatar,
-  Card,
   IconButton,
 } from "@material-tailwind/react";
 import {
   CubeTransparentIcon,
   UserCircleIcon,
   CodeBracketSquareIcon,
-  Square3Stack3DIcon,
-  ChevronDownIcon,
   PowerIcon,
-  RocketLaunchIcon,
   Bars2Icon,
 } from "@heroicons/react/24/solid";
  
-// profile menu component
 const profileMenuItems = [
   {
     label: "Sign Out",
@@ -36,15 +31,17 @@ const profileMenuItems = [
 ];
  
 function ProfileMenu() {
-  const navigate = useNavigate();
+  
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [cookies,setCookie,removeCookie] = useCookies([]);
+  const [cookie,removeCookie] = useCookies([]);
+  const navigate = useNavigate();
+
   function Logout(){
       removeCookie("jwt");
       navigate("/login");
   };
   const closeMenu = () => setIsMenuOpen(false);
- 
+   
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
@@ -95,70 +92,13 @@ function ProfileMenu() {
     </Menu>
   );
 }
- 
-
- 
-function NavListMenu() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
- 
-
- 
-  return (
-    <React.Fragment>
-      <Menu allowHover open={isMenuOpen} handler={setIsMenuOpen}>
-        <MenuHandler>
-          <Typography as="a" href="#" variant="small" className="font-normal">
-            <MenuItem className="hidden items-center gap-2 font-medium text-blue-gray-900 lg:flex lg:rounded-full">
-              <Square3Stack3DIcon className="h-[18px] w-[18px] text-blue-gray-500" />{" "}
-              Pages{" "}
-              <ChevronDownIcon
-                strokeWidth={2}
-                className={`h-3 w-3 transition-transform ${
-                  isMenuOpen ? "rotate-180" : ""
-                }`}
-              />
-            </MenuItem>
-          </Typography>
-        </MenuHandler>
-        <MenuList className="hidden w-[36rem] grid-cols-7 gap-3 overflow-visible lg:grid">
-          <Card
-            color="blue"
-            shadow={false}
-            variant="gradient"
-            className="col-span-3 grid h-full w-full place-items-center rounded-md"
-          >
-            <RocketLaunchIcon strokeWidth={1} className="h-28 w-28" />
-          </Card>
-        </MenuList>
-      </Menu>
-      <MenuItem className="flex items-center gap-2 font-medium text-blue-gray-900 lg:hidden">
-        <Square3Stack3DIcon className="h-[18px] w-[18px] text-blue-gray-500" />{" "}
-        Pages{" "}
-      </MenuItem>
-    </React.Fragment>
-  );
-}
- 
 // nav list component
-const navListItems = [
-  {
-    label: "Profile",
-    icon: UserCircleIcon,
-  },
-  {
-    label: "Dashboard",
-    icon: CubeTransparentIcon,
-  },
-  {
-    label: "Blogs",
-    icon: CodeBracketSquareIcon,
-  },
-];
+
  
-function NavList() {
+function NavList(props) {
   return (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
-      {navListItems.map(({ label, icon }, key) => (
+      {props.list.map(({ label, icon,onClick }, key) => (
         <Typography
           key={label}
           as="a"
@@ -167,7 +107,7 @@ function NavList() {
           color="gray"
           className="font-medium text-blue-gray-500"
         >
-          <MenuItem className="flex items-center gap-2 lg:rounded-full">
+          <MenuItem className="flex items-center gap-2 lg:rounded-full" onClick={onClick}>
             {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "}
             <span className="text-white"> {label}</span>
           </MenuItem>
@@ -179,9 +119,56 @@ function NavList() {
  
 export default function UserNavbar() {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
- 
+  const [userData,setUserData] = useState({
+    username: '',
+    id: ''
+  });
+  const navigate = useNavigate();
+  const [cookie] = useCookies([]);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
- 
+  const navListItems = [
+    {
+      label: "Profile",
+      icon: UserCircleIcon,
+      onClick: () => navigate(`/Profile?username=${encodeURIComponent(userData.username)}`)
+    },
+    {
+      label: "Dashboard",
+      icon: CubeTransparentIcon,
+      onClick: () => navigate(`/DashBoard?username=${encodeURIComponent(userData.username)}&id=${encodeURIComponent(userData.id)}`)
+    },
+    {
+      label: "Blogs",
+      icon: CodeBracketSquareIcon,
+      onClick: () => navigate("/Blogs")
+    },
+  ];
+  useEffect(()=>{
+    const verify_user = async()=>{
+    if(!cookie.jwt)
+        navigate('/Login');
+    else{ 
+        
+        const res = await fetch('http://localhost:5000/verify',{
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        const result = await res.json();
+        setUserData({
+          username: result.username,
+          id: result.id
+        });
+        console.log(result);
+        if(!result.status) navigate('/Login');
+        
+        return result;
+    }
+ }
+ verify_user();
+},[]);
   React.useEffect(() => {
     window.addEventListener(
       "resize",
@@ -203,7 +190,7 @@ export default function UserNavbar() {
           </div>
         </Typography>
         <div className="hidden lg:block">
-          <NavList />
+          <NavList list = {navListItems}/>
         </div>
         <IconButton
           size="sm"
@@ -217,7 +204,7 @@ export default function UserNavbar() {
         <ProfileMenu />
       </div>
       <Collapse open={isNavOpen} className="overflow-hidden">
-        <NavList />
+        <NavList list = {navListItems}/>
       </Collapse>
     </Navbar>
   );

@@ -15,7 +15,6 @@ import CommentCard from "../Components/CommentCard";
 export default function BlogPage(){
     const [cookie] = useCookies([]);
     const [error,setError] = useState(false);
-    const footer = useRef();
     const container = useRef();
     const [comments, setComments] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +31,15 @@ export default function BlogPage(){
     const query = new URLSearchParams(location.search);
     const id = query.get('id');
     const goBack= () => navigate(-1);
+    const updateData = async ()=>{
+        const res = await fetch(`http://localhost:5000/comment?offset=${0}&id=${encodeURIComponent(id)}&limit=${offset}`,{
+            method: 'GET',
+        });
+        const commentObj = await res.json();
+        console.log(commentObj.items);
+        setComments(()=>[...commentObj.items]);
+        setOffset(commentObj.end);
+    }
     const fetchData = useCallback(async () => {
         if (isLoading) return;
         setIsLoading(true);
@@ -41,7 +49,7 @@ export default function BlogPage(){
         const commentObj = await res.json();
         if(commentObj.end <= numberComments){
             setComments((prev)=>[...prev,...commentObj.items]);
-            setOffset(commentObj.end);
+            setOffset(commentObj.end+1);
         }
         setIsLoading(false);
       }, [offset, isLoading]);
@@ -85,7 +93,7 @@ export default function BlogPage(){
         }
         getBlog();
     },[])
-
+    const navigateToUser = ()=> navigate(`/Profile?username=${decodeURIComponent(blog.author)}`);
     useEffect(() => {
         const handleScroll = () => {
             //const container = footer;
@@ -98,6 +106,7 @@ export default function BlogPage(){
           window.removeEventListener("scroll", handleScroll);
         };
       }, [fetchData]);
+      const writtenBy = <button onClick={navigateToUser} className="hover:text-red-700 transition-colors">{blog.author}</button>;
     VerifyUser();
     return(
         <div className="flex flex-col align-middle justify-center overflow-x-hidden">
@@ -111,7 +120,7 @@ export default function BlogPage(){
                         <b><h3 className="text-5xl text-white-300 text-yellow-300">{blog.title}</h3></b>
                     </div>
                     <div className="flex justify-start py-2 px-5 border-b-black border-b-2">
-                        <code className="text-sm text-yellow-300">{"Written By " +  blog.author.toUpperCase()}</code>
+                        <code className="text-sm text-yellow-300">Written by {writtenBy}</code>
                     </div>
                     <div className="p-5">
                         <p className="text-lg text-yellow-300 px-3">
@@ -129,7 +138,7 @@ export default function BlogPage(){
                             <GoComment color="yellow"/>
                         </IconContext.Provider>
                     </div>
-                        <CommentBoxTextarea id = {blog.id} setNumber = {setNumberComments} number = {numberComments}/>
+                        <CommentBoxTextarea id = {blog.id} setNumber = {setNumberComments} number = {numberComments} update = {updateData}/>
                         <div></div>
                 </Card>
                
@@ -140,7 +149,7 @@ export default function BlogPage(){
             </div>
             <div className="flex flex-col gap-5 p-4" ref = {container}>
                 {numberComments > 0 && comments.map((val)=>{
-                    return <CommentCard body = {val.body} author = {val.author} date = {val.date}/>
+                    return <CommentCard body = {val.body} author = {val.author} date = {val.date} key = {val.id}/>
                 })}  
             </div>
             <div className="flex flex-row justify-center align-middle items-center p-7">

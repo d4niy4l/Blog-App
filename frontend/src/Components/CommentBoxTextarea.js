@@ -3,8 +3,7 @@ import { useState,useRef } from "react";
 import {jwtDecode} from 'jwt-decode'
 import { useCookies } from 'react-cookie';
 export function CommentBoxTextarea(props) {
-  const [comments, setComments] = useState('');
-  const [newComment, setNewComment] = useState();
+  const [newComment, setNewComment] = useState('');
   const textbox = useRef(null);
   const [cookie] = useCookies();
   const change = (event)=>{
@@ -15,7 +14,6 @@ export function CommentBoxTextarea(props) {
   const postComment = async()=>{
     try{ 
       const jwt= jwtDecode(cookie.jwt);
-      console.log('res');
       const res = await fetch('http://localhost:5000/comment',{
           method: 'POST',
           headers:{
@@ -33,6 +31,7 @@ export function CommentBoxTextarea(props) {
       if(result.status){
         textbox.current.value = "";
         props.setNumber(props.number + 1);
+        props.update();
       }
       else{
         console.log('error');
@@ -47,7 +46,7 @@ export function CommentBoxTextarea(props) {
     <textarea ref={textbox} onChange = {change} placeholder="Your Comment" maxLength={100} minLength={10} className="rounded-lg outline-none border-yellow-300 focus:scale-105 transition-all  w-full text-yellow-200 matchColor active:border-red-600"/>
       <div className="flex w-full justify-between py-1.5">
         <div className="flex gap-2">
-          <Button size="sm" className="rounded-md text-yellow-300 hover:text-red-600 transition-all" onClick={postComment}>
+          <Button size="sm" className="rounded-md text-yellow-300 hover:text-red-600 transition-all" onClick={postComment} disabled = {newComment.length < 5}>
             Post Comment
           </Button>
         </div>

@@ -1,6 +1,4 @@
-import { FaInstagram } from "react-icons/fa";
-import { FaTwitter } from "react-icons/fa";
-import { FaDiscord } from "react-icons/fa";
+
 import { IoLogoGithub } from "react-icons/io"; 
 import { FaLinkedin } from "react-icons/fa";
 import {DiReact,DiNodejs,DiMongodb} from 'react-icons/di'
@@ -19,7 +17,7 @@ export default function Footer(){
                         <h1 className="text-white text-xl">BLOGGO</h1>
                     </div>
                     <div className="flex flex-col gap-2 md:border-b-4 border-white p-3">
-                        <code>MOCK NOTES APP WITH USER FUNCTIONALITY</code>
+                        <code>MOCK BLOG APP WITH USER FUNCTIONALITY</code>
                         <code>MADE BY BREAD</code>
                     </div>
                     <div className="flex flex-row gap-5 align-middle justify-center p-3">

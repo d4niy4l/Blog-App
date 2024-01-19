@@ -7,6 +7,8 @@ import './App.css';
 import DashBoard from './MainPages/Dashboard';
 import RegisteredPage from './confirmationPages/RegisteredPage';
 import BlogPage from './MainPages/BlogPage';
+import ProfilePage from './MainPages/ProfilePage'
+import MainPage from './MainPages/MainPage';
 import react from 'react';
 function App() {
   const [log,setLog] = useState(false);
@@ -31,7 +33,9 @@ function App() {
         <Route path = '/Signup'  exact element = {<SignIn/>}/>
         <Route path = '/Registered' exact element = {<RegisteredPage/>}/>
         <Route path = {`/DashBoard`} exact element = {<DashBoard user = {user}/>}/>
-        <Route path = {'/Blogs'} exact element = {<BlogPage/>}/>
+        <Route path = {'/Blog'} exact element = {<BlogPage/>}/>
+        <Route path = {'/Profile'} exact element = {<ProfilePage/>}/>
+        <Route path = {'/Blogs'} exact element = {<MainPage/>}/>
         </Routes>
     </div>
   );

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function BlogCard(props) {
     const navigate = useNavigate();
     const click = (event)=>{
-        navigate(`/Blogs?id=${encodeURIComponent(props.id)}`);
+        navigate(`/Blog?id=${encodeURIComponent(props.id)}`);
     }
     const delete_blog = async()=>{
         try{
@@ -26,12 +26,15 @@ export default function BlogCard(props) {
         
     }
 return (
-    <div className="flex flex-col gap-2 rounded-lg p-2 w-300 h-40 matchColor">
-    <div className="flex flex-row justify-start align-middle">
-        <button className="px-1 pt-1 hover:scale-105 transition-all" onClick={delete_blog}>
-            <FaTrashCan color="red"/>
-        </button>
-    </div>
+    <div className={"flex flex-col gap-1 rounded-lg p-2 w-300 matchColor " + (props.notifyDeletion ? "h-40" : "")}>
+        {props.notifyDeletion && <div className="flex flex-row justify-start align-middle">
+            <button className="px-1 pt-1 hover:scale-105 transition-all" onClick={delete_blog}>
+                <FaTrashCan color="red"/>
+            </button>
+        </div>}
+        {
+            props.main && <code><p className="text-yellow-300 text-lg flex flex-row align-middle justify-center gap-1">By <button onClick={()=>{navigate(`/Profile?username=${props.author}`)}}>{props.author}</button></p></code>
+        }
     <div className="flex flex-col gap-1.5">
         <div className="flex justify-center align-middle">
             <h1 className="text-xl text-yellow-300">

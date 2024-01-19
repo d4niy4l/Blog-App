@@ -8,6 +8,8 @@ const get_one_blog = require('./routes/oneBlog');
 const comment = require('./routes/comment');
 const cookie_parser = require('cookie-parser');
 const verify_user = require('./routes/verify');
+const get_all_blogs = require('./routes/all_blogs');
+const user_query = require('./routes/user');
 require('dotenv').config();
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000","*");
@@ -35,3 +37,5 @@ app.use('/post-blog',post_blog);
 app.use('/oneblog',get_one_blog);
 app.use('/comment',comment);
 app.use('/verify',verify_user);
+app.use('/blogs',get_all_blogs) ;
+app.use('/user',user_query);

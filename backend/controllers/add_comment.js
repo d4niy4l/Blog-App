@@ -7,7 +7,7 @@ const addComment = async(req,res) =>{
         const user = await User.findById(author_id)
         const author = user.username;
         if(!blog) return res.status(404).json({ error: 'Blog not found' });
-        blog.comments.push({body: body, author: author, date: new Date});
+        blog.comments.unshift({body: body, author: author, date: new Date});
         await blog.save();
         res.status(200).json({ status: true });
     }
