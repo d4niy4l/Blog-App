@@ -1,6 +1,5 @@
 const Blog = require('./../mongoDB/blog');
 const User = require('./../mongoDB/users');
-const mongoose = require('mongoose');
 const getBlogs = async (req,res)=>{
     try{
         const {author} = req.query;

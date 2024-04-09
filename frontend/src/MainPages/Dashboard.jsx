@@ -7,8 +7,7 @@ import { useLocation } from 'react-router-dom';
 import BlogCard  from "../Components/BlogCard";
 import Footer from "../Components/Footer";
 import VerifyUser from "../authPage/VerifyUserHook";
-export default function DashBoard(props){
-    const navigate = useNavigate();
+export default function DashBoard(){
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const username = query.get('username');
@@ -118,7 +117,7 @@ export default function DashBoard(props){
     console.log(data[0]?.id);
     return( 
   <div className="flex flex-col overflow-x-hidden gap-5 w-screen">
-  <UserNavbar />
+  <UserNavbar query = 'Search Profiles'/>
   <div className="flex md:flex-row xxs:flex-col w-screen gap-5 justify-center align-middle">
     <div className="flex flex-col justify-center align-middle gap-3">
       <div className="flex flex-col">

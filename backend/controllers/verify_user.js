@@ -13,7 +13,6 @@ module.exports.verify_user = async (req,res)=>{
                     }
                     else{
                         const user = await User.findById(decoded_token.id);
-                        console.log(user);
                         if(user) res.json({status: true, username: user.username, id: user.id});
                         else res.json({status:false});
                     }

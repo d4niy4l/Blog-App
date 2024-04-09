@@ -8,15 +8,15 @@ import logo from './../authPage/logo.png'
 export default function Footer(){
    
     return(
-        <div className = 'bg-black flex flex-col w-full h-fit pt-10 pb-5'>
+        <div className = 'bg-black flex flex-col w-full h-fit pt-10 pb-5 sticky top-[100vh]'>
             <div className="flex flex-col text-white align-middle justify-center gap-2 p-5"> 
                 <hr/>
-                <div className="flex flex-col p-3 gap-8 align-middle justify-center"> 
-                    <div className="flex flex-row gap-3 md:border-b-4 border-whitealign-middle justify-center p-3">
-                        <img src={logo} width="40px" height="10px" />
+                <div className="flex flex-col p-2 gap-8 align-middle justify-center"> 
+                    <div className="flex flex-row gap-3 align-middle justify-center p-3">
+                        <img src={logo} width="40px" height="10px" alt="logo"/>
                         <h1 className="text-white text-xl">BLOGGO</h1>
                     </div>
-                    <div className="flex flex-col gap-2 md:border-b-4 border-white p-3">
+                    <div className="flex flex-col gap-1 md:border-b-4 border-white p-2">
                         <code>MOCK BLOG APP WITH USER FUNCTIONALITY</code>
                         <code>MADE BY BREAD</code>
                     </div>

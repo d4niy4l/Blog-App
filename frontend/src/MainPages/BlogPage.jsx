@@ -110,7 +110,7 @@ export default function BlogPage(){
     VerifyUser();
     return(
         <div className="flex flex-col align-middle justify-center overflow-x-hidden">
-            <UserNavbar/>
+            <UserNavbar query = "Search Blogs"/>
             <div className="matchColor flex align-middle justify-center flex-col items-center w-screen rounded-xl">
                 <div className = "flex flex-col gap-2 justify-center items-center h-fit rounded-none overflow-hidden border-b-black border-b-4 pt-5 pb-10 text-white" 
                 //style = {/*{backgroundImage: `url('https://c4.wallpaperflare.com/wallpaper/217/640/970/technology-discord-wallpaper-preview.jpg')`}*/}

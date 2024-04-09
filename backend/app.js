@@ -10,6 +10,7 @@ const cookie_parser = require('cookie-parser');
 const verify_user = require('./routes/verify');
 const get_all_blogs = require('./routes/all_blogs');
 const user_query = require('./routes/user');
+const search_blogs = require('./routes/search_blog');
 require('dotenv').config();
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000","*");
@@ -39,3 +40,4 @@ app.use('/comment',comment);
 app.use('/verify',verify_user);
 app.use('/blogs',get_all_blogs) ;
 app.use('/user',user_query);
+app.use('/search-blogs',search_blogs);

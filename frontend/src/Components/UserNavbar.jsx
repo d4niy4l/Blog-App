@@ -4,6 +4,7 @@ import {useCookies} from 'react-cookie';
 import {useNavigate} from 'react-router-dom';
 import {VscArrowUp} from 'react-icons/vsc';
 import {useEffect,useState} from 'react'
+import SearchBar from "./SearchBar";
 import {
   Navbar,
   Collapse,
@@ -117,7 +118,7 @@ function NavList(props) {
   );
 }
  
-export default function UserNavbar() {
+export default function UserNavbar(props) {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const [userData,setUserData] = useState({
     username: '',
@@ -178,30 +179,35 @@ export default function UserNavbar() {
  
   return (
     <Navbar className="w-screen min-w-full bg-gradient-to-t from-violet-900 via-gray-800 to-red-700 border-none">
-      <div className="relative mx-auto flex items-center justify-around text-blue-gray-900">
-        <Typography
+      <div className="mx-auto flex flex-row items-center text-blue-gray-900 gap-2 justify-between py-1">
+        <div className="flex flex-row gap-2 justify-start">
+          <Typography
           as="a"
           href="#"
           className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
-        >
-          <div className="flex flex-row gap-5 ">
+          >
+          <div className="flex flex-row">
             <img src = {logo} width={25} height={25}></img>
-            <h1>BLOGGO</h1>
+            <h1>LOGGO</h1>
           </div>
-        </Typography>
-        <div className="hidden lg:block">
-          <NavList list = {navListItems}/>
-        </div>
-        <IconButton
-          size="sm"
-          color="blue-gray"
-          variant="text"
-          onClick={toggleIsNavOpen}
-          className="ml-auto mr-2 lg:hidden"
-        >
+          </Typography>
+          <div className="hidden lg:block">
+            <NavList list = {navListItems}/>
+          </div>
+          <IconButton
+            size="sm"
+            color="blue-gray"
+            variant="text"
+            onClick={toggleIsNavOpen}
+            className="ml-auto mr-2 lg:hidden"
+          >
           <Bars2Icon className="h-6 w-6" />
-        </IconButton>
-        <ProfileMenu />
+          </IconButton>
+        </div>
+        <div className="flex flex-row gap-2 justify-end">
+          <SearchBar query = {props.query} search = {props.search} refreshSearch = {props.refreshSearch} refresh = {props.refresh}/>
+          <ProfileMenu/>
+        </div>
       </div>
       <Collapse open={isNavOpen} className="overflow-hidden">
         <NavList list = {navListItems}/>

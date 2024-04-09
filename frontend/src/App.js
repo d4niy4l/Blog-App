@@ -1,15 +1,17 @@
-import { Route,Routes} from 'react-router-dom';
+import {Route,Routes} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import './App.css';
 import Login from './authPage/Login';
 import SignIn from './authPage/SignIn';
 import LandingPage from './MainPages/LandingPage'
-import { useState } from 'react';
-import './App.css';
 import DashBoard from './MainPages/Dashboard';
 import RegisteredPage from './confirmationPages/RegisteredPage';
 import BlogPage from './MainPages/BlogPage';
 import ProfilePage from './MainPages/ProfilePage'
 import MainPage from './MainPages/MainPage';
-import react from 'react';
+import SearchPage from './MainPages/SearchPage'
+
+import React from 'react';
 function App() {
   const [log,setLog] = useState(false);
   const [user,setUser] = useState({
@@ -17,7 +19,7 @@ function App() {
     email: '',
     isLogged : false
   });
-  react.useEffect(()=>{
+  useEffect(()=>{
     const userDetails_JSON = localStorage.getItem("user");
     if(userDetails_JSON){
         let userDetails = JSON.parse(userDetails_JSON);
@@ -36,6 +38,7 @@ function App() {
         <Route path = {'/Blog'} exact element = {<BlogPage/>}/>
         <Route path = {'/Profile'} exact element = {<ProfilePage/>}/>
         <Route path = {'/Blogs'} exact element = {<MainPage/>}/>
+        <Route path = {'/Search'} exact element = {<SearchPage/>}/>
         </Routes>
     </div>
   );

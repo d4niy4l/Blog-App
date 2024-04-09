@@ -67,7 +67,7 @@ export default function ProfilePage(props){
     const date = new Date(profileData.date);
     return( 
   <div className="flex flex-col overflow-x-hidden gap-5 w-screen">
-  <UserNavbar />
+  <UserNavbar query = 'Search Profiles'/>
   <div className="flex md:flex-row xxs:flex-col w-screen gap-5 justify-center align-middle">
     <div className="flex flex-col justify-center align-middle gap-3">
       <div className="flex flex-col">
