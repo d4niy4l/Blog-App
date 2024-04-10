@@ -7,7 +7,8 @@ const blogSchema = mongoose.Schema({
     title: String,
     body: String,
     DatePublished: Date, 
-    comments: [{body: String, author: String, date: Date}]
+    comments: [{body: String, author: String, date: Date}],
+    likes: [String]
 });
 
 const Blog = mongoose.model('Blog', blogSchema);

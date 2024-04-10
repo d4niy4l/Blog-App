@@ -13,7 +13,8 @@ const SubmitBlog = async(req,res)=>{
             body: body,
             DatePublished: new Date(),
             title: title,
-            comments: []
+            comments: [],
+            likes: []
         })
         await blog.save();
         res.status(200).json({message: 'Blog posted successfully'})

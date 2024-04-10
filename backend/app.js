@@ -11,7 +11,11 @@ const verify_user = require('./routes/verify');
 const get_all_blogs = require('./routes/all_blogs');
 const user_query = require('./routes/user');
 const search_blogs = require('./routes/search_blog');
+const search_users = require('./routes/search_users');
+const like_toggler = require('./routes/toggle_likes');
+
 require('dotenv').config();
+
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000","*");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE");
@@ -25,7 +29,7 @@ app.use(express.json());
 const startDB  = async()=>{
     try{
         await connectDB(process.env.MONGO_URI);
-        app.listen(5000,()=>console.log('au'));
+        app.listen(5000,()=>console.log('server is on'));
     }
     catch(error){
         console.log(error);
@@ -41,3 +45,5 @@ app.use('/verify',verify_user);
 app.use('/blogs',get_all_blogs) ;
 app.use('/user',user_query);
 app.use('/search-blogs',search_blogs);
+app.use('/search-users',search_users);
+app.use('/toggle-like',like_toggler);

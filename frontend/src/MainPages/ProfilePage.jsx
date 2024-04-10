@@ -92,8 +92,8 @@ export default function ProfilePage(props){
     <div className="flex flex-col items-center gap-3">
       <div className= {`flex flex-col items-center w-fit gap-2 overflow-y-scroll overflow-x-hidden ${data.length === 0 ? "justify-center md:align-middle pl-2" : 
       data.length < 3 ? 'xxs:justify-start md:justify-center md:align-middle xxs:align-top h-fit' : 'h-96'}`}>
-            {data.length === 0 ? <b><h1 className="text-xl text-yellow-300 p-3">NO BLOGS POSTED YET</h1></b>: data.map((val)=>{
-                return <BlogCard body = {val.body} title = {val.title} author = {val.author} id = {val.id}  key = {Math.random()}/>
+            {data.length === 0 ? <b><h1 className="text-xl text-yellow-300 p-3">NO BLOGS POSTED YET</h1></b>: data.map((val,index)=>{
+                return <BlogCard body = {val.body} title = {val.title} author = {val.author} id = {val.id}  key = {index} likes = {val.likes}/>
             })}
       </div>
     </div>

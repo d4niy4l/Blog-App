@@ -3,10 +3,10 @@ import { IoLogoGithub } from "react-icons/io";
 import { FaLinkedin } from "react-icons/fa";
 import {DiReact,DiNodejs,DiMongodb} from 'react-icons/di'
 import { Link } from "react-router-dom";
-
+import { useState } from 'react'
 import logo from './../authPage/logo.png'
 export default function Footer(){
-   
+    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     return(
         <div className = 'bg-black flex flex-col w-full h-fit pt-10 pb-5 sticky top-[100vh]'>
             <div className="flex flex-col text-white align-middle justify-center gap-2 p-5"> 
@@ -31,7 +31,7 @@ export default function Footer(){
                 </div>
                 <hr/>
                 <div className="flex flex-col justify-center align-middle p-3 gap-3">
-                    <code>2023 ALL RIGHTS RESERVED</code>
+                    <code>{ currentYear + " ALL RIGHTS RESERVED"}</code>
                     <code>GITHUB: <Link to = 'https://github.com/d4niy4l?'>d4niy4l</Link></code>
                     <div className="flex xs:flex-row xxs:flex-col align-middle justify-center gap-3 items-center">
                         <DiReact size = {75} color = 'cyan'/>

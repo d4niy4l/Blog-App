@@ -5,16 +5,23 @@ import { Card, Button } from "@material-tailwind/react";
 import {useCookies} from 'react-cookie'
 import { CommentBoxTextarea } from "../Components/CommentBoxTextarea";
 import { IoIosArrowRoundBack } from "react-icons/io";
-import {GoComment} from 'react-icons/go'
+import { GoComment } from 'react-icons/go'
+import { FaHeart } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import VerifyUser from "../authPage/VerifyUserHook";
 import {GiNotebook} from 'react-icons/gi'
 import Footer from "../Components/Footer";
 import {debounce} from 'lodash'
 import CommentCard from "../Components/CommentCard";
+import { jwtDecode } from "jwt-decode";
+
 export default function BlogPage(){
+    
     const [cookie] = useCookies([]);
+    const jwt = jwtDecode(cookie.jwt);
     const [error,setError] = useState(false);
+    const [like,setLike] = useState(false);
+    const [complete,setComplete] = useState(false);
     const container = useRef();
     const [comments, setComments] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -75,6 +82,7 @@ export default function BlogPage(){
         const getBlog = async()=>{
             if(!cookie.jwt) navigate('/Login');
             try {
+ 
                 const res = await fetch(`http://localhost:5000/oneBlog?id=${encodeURIComponent(id)}`, {
                   method: 'GET'
                 });
@@ -84,7 +92,7 @@ export default function BlogPage(){
                 }
                 const result = await res.json();
                 setBlog(result.blog);
-                setNumberComments(result.blog.comments.length);
+                setNumberComments(result.blog.comments.length);                
             }
             catch(err){
                 setError(true);
@@ -92,6 +100,7 @@ export default function BlogPage(){
             }
         }
         getBlog();
+
     },[])
     const navigateToUser = ()=> navigate(`/Profile?username=${decodeURIComponent(blog.author)}`);
     useEffect(() => {
@@ -107,6 +116,29 @@ export default function BlogPage(){
         };
       }, [fetchData]);
       const writtenBy = <button onClick={navigateToUser} className="hover:text-red-700 transition-colors">{blog.author}</button>;
+      const toggle_like = async ()=>{
+        const jwt = jwtDecode(cookie.jwt);
+        const res = await fetch(
+            `http://localhost:5000/toggle-like?id=${encodeURIComponent(blog.id)}&author_id=${encodeURIComponent(jwt.id)}`,{
+                method: 'GET'
+            }
+        );
+        if(res.status === 200){
+            if(like){
+                const index = blog.likes.indexOf(jwt.id);
+                blog.likes.splice(index,1);
+            }
+            else{
+                blog.likes.push(jwt.id);
+            }
+            setLike(!like);
+
+        }
+    }
+    if(blog.likes && complete === false){
+        setLike(blog.likes.includes(jwt.id));
+        setComplete(true);
+    }
     VerifyUser();
     return(
         <div className="flex flex-col align-middle justify-center overflow-x-hidden">
@@ -115,9 +147,19 @@ export default function BlogPage(){
                 <div className = "flex flex-col gap-2 justify-center items-center h-fit rounded-none overflow-hidden border-b-black border-b-4 pt-5 pb-10 text-white" 
                 //style = {/*{backgroundImage: `url('https://c4.wallpaperflare.com/wallpaper/217/640/970/technology-discord-wallpaper-preview.jpg')`}*/}
                 >
-                    <div className="flex flex-row gap-5 justify-center p-3">
-                        <GiNotebook size = {50} color = 'yellow'/>
-                        <b><h3 className="text-5xl text-white-300 text-yellow-300">{blog.title}</h3></b>
+                    <div className="flex flex-row justify-between items-center">
+                        <div className="flex flex-row gap-5 justify-center p-3">
+                            <GiNotebook size="50" color="yellow"/>
+                            <b><h3 className="text-5xl text-white-300 text-yellow-300">{blog.title}</h3></b>
+                        </div>
+                        <div className="flex flex-row justify-end p-3">
+                            <div className="flex flex-col">
+                                <button onClick={toggle_like}>
+                                    <FaHeart color={ like ? 'red' : 'black'} size={25}/>
+                                </button>
+                                <p className="text-md text-yellow-300">{blog.likes?.length === undefined ? 0 : blog.likes.length }</p>
+                            </div>
+                        </div>
                     </div>
                     <div className="flex justify-start py-2 px-5 border-b-black border-b-2">
                         <code className="text-sm text-yellow-300">Written by {writtenBy}</code>
