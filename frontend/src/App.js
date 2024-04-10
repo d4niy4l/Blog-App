@@ -9,7 +9,9 @@ import RegisteredPage from './confirmationPages/RegisteredPage';
 import BlogPage from './MainPages/BlogPage';
 import ProfilePage from './MainPages/ProfilePage'
 import MainPage from './MainPages/MainPage';
-import SearchPage from './MainPages/SearchPage'
+import SearchPage from './MainPages/SearchPage';
+import UpdateProfile from './MainPages/UpdateProfile';
+
 
 import React from 'react';
 function App() {
@@ -39,6 +41,7 @@ function App() {
         <Route path = {'/Profile'} exact element = {<ProfilePage/>}/>
         <Route path = {'/Blogs'} exact element = {<MainPage/>}/>
         <Route path = {'/Search'} exact element = {<SearchPage/>}/>
+        <Route path = {'/Update'} exact element = {<UpdateProfile/>}/>
         </Routes>
     </div>
   );

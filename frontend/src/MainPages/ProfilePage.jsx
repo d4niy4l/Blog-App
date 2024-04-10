@@ -1,7 +1,7 @@
 import React from "react";
 import UserNavbar from "../Components/UserNavbar";
-import { Card, Input, Button} from "@material-tailwind/react";
-import { useState, useRef, useEffect } from "react";
+import { Card, Button} from "@material-tailwind/react";
+import { useState,  useEffect } from "react";
 import {useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import BlogCard  from "../Components/BlogCard";
@@ -17,30 +17,31 @@ export default function ProfilePage(props){
     const username = query.get('username');
     const [refreshCount, setRefreshCount] = useState(0);
     const [cookie] = useCookies();
-    const [profileData,setProfileData] = useState({})
-
+    const [profileData,setProfileData] = useState({});
     const [data, setData] = useState([]);
-
+    const [imageUrl, setImageUrl] = useState('');
+    const jwt = jwtDecode(cookie.jwt);
+     
    VerifyUser(); 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const res = await fetch(`http://localhost:5000/post-blog?author=${username}`, {
-            method: 'GET',
-          });
-          if (res.status === 200) {
-            const blog_json = await res.json();
-            const blogs = blog_json.blogs;
-            setData(blogs);         
-          } 
-          else
-            console.error('Error fetching data');
-        } catch (error) {
-          console.error('An error occurred:', error);
-        }
-      };
-      fetchData(); 
-    }, [refreshCount]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/post-blog?author=${username}`, {
+          method: 'GET',
+        });
+        if (res.status === 200) {
+          const blog_json = await res.json();
+          const blogs = blog_json.blogs;
+          setData(blogs);         
+        } 
+        else
+          console.error('Error fetching data');
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    };
+    fetchData(); 
+  }, [refreshCount]);
     
 
     useEffect(()=>{
@@ -64,6 +65,27 @@ export default function ProfilePage(props){
         getId_and_compare();
        
     },[]);
+    useEffect(() => {
+      let objectUrl; // Declare a variable to store the object URL
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
+            method: 'GET',
+          });
+          const blob = await response.blob(); // Convert response to a Blob object
+          objectUrl = URL.createObjectURL(blob); // Convert Blob to a data URL
+          setImageUrl(objectUrl);
+        } catch (error) {
+          console.error('Error fetching image:', error);
+        }
+      };
+      fetchData();
+      return () => {
+        if (objectUrl) {
+          URL.revokeObjectURL(objectUrl);
+        }
+      };
+    }, []);
     const date = new Date(profileData.date);
     return( 
   <div className="flex flex-col overflow-x-hidden gap-5 w-screen">
@@ -72,8 +94,8 @@ export default function ProfilePage(props){
     <div className="flex flex-col justify-center align-middle gap-3">
       <div className="flex flex-col">
         <Card className="flex flex-col py-7 px-5 gap-3 matchColor">
-            <div className="flex flex-row gap-3 p-3 justify-center ">
-                <FaRegUser size={30} color = 'yellow'/>
+            <div className="flex flex-col gap-3 p-3 align-middle items-center">
+                {imageUrl ? <img src = {imageUrl} alt="pfp" width={75} height={75} className="rounded-full"/> : <FaRegUser color="yellow" size={30} />}
                 <b><code><h1 className="text-3xl text-yellow-300">{profileData.username}</h1></code></b>
             </div>
             {profileData.id === jwtDecode(cookie.jwt).id ? <div className="flex flex-row justify-center">

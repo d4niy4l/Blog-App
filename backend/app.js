@@ -13,11 +13,14 @@ const user_query = require('./routes/user');
 const search_blogs = require('./routes/search_blog');
 const search_users = require('./routes/search_users');
 const like_toggler = require('./routes/toggle_likes');
+const pfp = require('./routes/profilepicture');
+
+
 
 require('dotenv').config();
 
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000","*");
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
     res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow credentials
@@ -47,3 +50,4 @@ app.use('/user',user_query);
 app.use('/search-blogs',search_blogs);
 app.use('/search-users',search_users);
 app.use('/toggle-like',like_toggler);
+app.use('/pfp',pfp);

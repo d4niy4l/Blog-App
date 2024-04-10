@@ -14,6 +14,8 @@ import Footer from "../Components/Footer";
 import {debounce} from 'lodash'
 import CommentCard from "../Components/CommentCard";
 import { jwtDecode } from "jwt-decode";
+import { FaRegUser } from "react-icons/fa";
+
 
 export default function BlogPage(){
     
@@ -105,7 +107,6 @@ export default function BlogPage(){
     const navigateToUser = ()=> navigate(`/Profile?username=${decodeURIComponent(blog.author)}`);
     useEffect(() => {
         const handleScroll = () => {
-            //const container = footer;
             if (container.current.scrollTop + container.current.clientHeight >= container.current.scrollHeight) {
               debouncedFetchData();
             }
@@ -115,7 +116,6 @@ export default function BlogPage(){
           window.removeEventListener("scroll", handleScroll);
         };
       }, [fetchData]);
-      const writtenBy = <button onClick={navigateToUser} className="hover:text-red-700 transition-colors">{blog.author}</button>;
       const toggle_like = async ()=>{
         const jwt = jwtDecode(cookie.jwt);
         const res = await fetch(
@@ -139,7 +139,33 @@ export default function BlogPage(){
         setLike(blog.likes.includes(jwt.id));
         setComplete(true);
     }
+    const [imageUrl, setImageUrl] = useState('');
+    useEffect(() => {
+        let objectUrl; // Declare a variable to store the object URL
+        const fetchData = async () => {
+          try {
+            const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
+              method: 'GET',
+            });
+            const blob = await response.blob(); // Convert response to a Blob object
+            objectUrl = URL.createObjectURL(blob); // Convert Blob to a data URL
+            setImageUrl(objectUrl);
+          } catch (error) {
+            console.error('Error fetching image:', error);
+          }
+        };
+        fetchData();
+        return () => {
+          if (objectUrl) {
+            URL.revokeObjectURL(objectUrl);
+          }
+        };
+    });
     VerifyUser();
+    const writtenBy =  (<div className="flex flex-col items-center">
+                            {imageUrl ? <img src = {imageUrl} alt="pfp" width={35} height={35} className="rounded-full"/> : <FaRegUser color="yellow" size={30} />}
+                            <button onClick={navigateToUser} className="hover:text-red-700 transition-colors">{blog.author}</button>
+                        </div>);
     return(
         <div className="flex flex-col align-middle justify-center overflow-x-hidden">
             <UserNavbar query = "Search Blogs"/>
@@ -161,8 +187,8 @@ export default function BlogPage(){
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-start py-2 px-5 border-b-black border-b-2">
-                        <code className="text-sm text-yellow-300">Written by {writtenBy}</code>
+                    <div className="flex justify-start py-2 px-5 border-b-black border-b-2 flex-row text-center text-sm text-yellow-300 align-middle">
+                        {writtenBy}
                     </div>
                     <div className="p-5">
                         <p className="text-lg text-yellow-300 px-3">
