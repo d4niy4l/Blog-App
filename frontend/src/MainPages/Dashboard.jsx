@@ -15,7 +15,6 @@ export default function DashBoard(){
     const [wordCount, setCount] = useState(0);
     const [serverError, setError] = useState(false);
     const [inputError, setInputError] = useState(false);
-    const [loading, setLoading] = useState(true);
 
     const [formData, setFormData] = useState({
         title: '',
@@ -161,8 +160,8 @@ export default function DashBoard(){
       <div className="flex flex-row align-middle">
         <Button disabled = {data.length === 0}  onClick={deleteAll} className="text-yellow-300 hover:text-red-500 transition-al">DELETE ALL BLOGS</Button>
       </div>
-      <div className= {`flex flex-col items-center w-fit gap-2 overflow-y-scroll overflow-x-hidden ${data.length === 0 ? "justify-center md:align-middle pl-2" : 
-      data.length < 3 ? 'xxs:justify-start md:justify-center md:align-middle xxs:align-top h-fit' : 'h-96'}`}>
+      <div className= {`flex flex-col items-center w-fit gap-2  overflow-x-hidden ${data.length === 0 ? "overflow-y-hidden justify-center md:align-middle pl-2" : 
+      data.length < 3 ? 'xxs:justify-start md:justify-center md:align-middle xxs:align-top h-fit overflow-y-hidden' : 'h-96 overflow-y-scroll'}`}>
             {data.length === 0 ? <b><h1 className="text-xl text-yellow-300 p-3">NO BLOGS POSTED YET</h1></b>: data.map((val)=>{
                 {return <BlogCard body = {val.body} title = {val.title} author = {val.author} likes = {val.likes}
                         id = {val.id} notifyDeletion = {notifyDeletion} key = {1}/>}

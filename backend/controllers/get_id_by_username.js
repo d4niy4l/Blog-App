@@ -6,7 +6,7 @@ get_id = async (req,res)=>{
         if(!user){
            return res.status(404).json({status:false});
         }
-        res.status(200).json({status: true, username: user.username,id: user.id, date: user.dateJoined})
+        res.status(200).json({status: true, username: user.username,id: user.id, date: user.dateJoined, bio: user.bio})
     }
     catch(err){
         console.log(err);

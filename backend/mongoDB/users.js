@@ -5,6 +5,7 @@ const userSchema = mongoose.Schema({
     email: String,
     dateJoined: Date,
     lastUpdated: Date,
+    bio: String
 });
 const User = mongoose.model('User',userSchema);
 module.exports = User;

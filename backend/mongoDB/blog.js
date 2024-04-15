@@ -8,7 +8,8 @@ const blogSchema = mongoose.Schema({
     body: String,
     DatePublished: Date, 
     comments: [{body: String, author: String, date: Date}],
-    likes: [String]
+    likes: [String],
+    author_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
 const Blog = mongoose.model('Blog', blogSchema);

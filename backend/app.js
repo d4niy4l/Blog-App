@@ -14,7 +14,7 @@ const search_blogs = require('./routes/search_blog');
 const search_users = require('./routes/search_users');
 const like_toggler = require('./routes/toggle_likes');
 const pfp = require('./routes/profilepicture');
-
+const update_bio = require('./routes/update_bio');
 
 
 require('dotenv').config();
@@ -51,3 +51,5 @@ app.use('/search-blogs',search_blogs);
 app.use('/search-users',search_users);
 app.use('/toggle-like',like_toggler);
 app.use('/pfp',pfp);
+app.use('/update-bio',update_bio);
+//upload pfp

@@ -21,7 +21,8 @@ router.route('/').post(async (req,res)=>{
             password: encryptedPass,
             email: email,
             dateJoined: new Date(),
-            lastUpdated: new Date()
+            lastUpdated: new Date(), 
+            bio: 'New to Bloggo 😊',
         })
         await user.save();
         res.status(200).json({success: true, message: 'success'});

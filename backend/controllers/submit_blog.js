@@ -7,6 +7,7 @@ const SubmitBlog = async(req,res)=>{
         if(body.length < 200 || title.length < 3) return res.status(400).json({message: 'Input Error'});
         const user = await User.find({username: author});
         if(!user.length) return res.status(400).json({message: 'Input Error'});
+        console.log(user[0]);
         const blog = new Blog({
             id: UUIDV4(),
             author: author,
@@ -14,7 +15,8 @@ const SubmitBlog = async(req,res)=>{
             DatePublished: new Date(),
             title: title,
             comments: [],
-            likes: []
+            likes: [],
+            author_id: user[0]._id
         })
         await blog.save();
         res.status(200).json({message: 'Blog posted successfully'})
