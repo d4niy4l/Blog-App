@@ -7,6 +7,12 @@ import { jwtDecode } from 'jwt-decode';
 import { useCookies } from 'react-cookie';
 import { useEffect, useState, useRef } from 'react';
 import { FaRegUser } from "react-icons/fa";
+import Modal from '../Components/Modal';
+
+import axios from 'axios';
+
+
+
 export default function UpdateProfile(){
     const navigate = useNavigate();
     const [cookie] = useCookies();
@@ -14,14 +20,17 @@ export default function UpdateProfile(){
     const query = new URLSearchParams(location.search);
     const username = query.get('username');
     const id = query.get('id');
-    const jwt = jwtDecode(cookie.jwt);
+    
     const [profileData,setProfileData] = useState({});
+    const [showModal, setShowModal] = useState(false);
     const [imageUrl,setImageUrl] = useState('');
     const [imageSrc, setImageSrc] = useState('');
     const [imgHover, setImgHover] = useState(false);
     const [newBio, setNewBio] = useState('');
     const [dimensions, setDimensions] = useState({});
-    const bio_ref = useRef(null);                              
+    const bio_ref = useRef(null);     
+    const jwt = jwtDecode(cookie.jwt);                         
+    VerifyUser();
     const bioOnChange = (event)=>{
         const { value } = event.target;
         setNewBio(value);
@@ -31,28 +40,35 @@ export default function UpdateProfile(){
         navigate('/Login');
     }
 
-   const uploadImage = async (e)=>{
-        try{
-            const formData = new FormData();
-            formData.append('image',e.target.files[0]);
-            const response = await fetch('http://localhost:5000/pfp',{
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                }
-            }); 
-            if(response.ok){
-                alert('success');
-            }
-            else {
-                alert('fuck');
-            }
-        } catch(err){
-            console.log('Error uploading image: ',err);
-
+    const uploadImage = async (e) => {
+        try {
+          const file = e.target.files[0]; 
+          setImageSrc(file);
+      
+          const formData = new FormData();
+          formData.append('image', imageSrc);
+      
+          formData.append('user_id', profileData.id);
+      
+          const response = await axios.post('http://localhost:5000/pfp', formData, {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            } 
+          });
+      
+          if (response.status === 200) {
+            const result = response.data; // Assuming the server returns JSON data
+            setImageUrl(result.imageUrl);
+            console.log(result);
+          } else {
+            alert('Unexpected error, please login again');
+            navigate('/Login');
+          }
+          e.target.value = '';
+        } catch (err) {
+          console.log('Error uploading image: ', err);
         }
-   }
+      }
 
     const uploadBio = async (event)=>{
         event.preventDefault();
@@ -106,25 +122,18 @@ export default function UpdateProfile(){
     }, []);
 
     useEffect(()=>{
-        let objectUrl; 
         const fetchData = async () => {
             try {
                 const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
                 method: 'GET',
             });
-            const blob = await response.blob(); 
-            objectUrl = URL.createObjectURL(blob); 
-            setImageUrl(objectUrl);
+            const result = await response.json();
+            setImageUrl(result.url);
             } catch (error) {
                 console.error('Error fetching image:', error);
             }
         };
         fetchData();
-        return () => {
-            if (objectUrl) {
-                URL.revokeObjectURL(objectUrl);
-            }
-        };
     },[]);
 
     useEffect(()=>{
@@ -173,14 +182,20 @@ export default function UpdateProfile(){
                     <div className="flex flex-row align-middle justify-center gap-2 matchColor p-5">
                         <div className="flex flex-col gap-3 p-3 align-middle items-center">
                             <div className='flex flex-col align-middle justify-center gap-2'>
-                                <label htmlFor="img_id" className='cursor-pointer relative' onMouseEnter={()=>{setImgHover(true)}} onMouseLeave={()=>setImgHover(false)}>
+                                <label htmlFor="popup_btn" className='cursor-pointer relative' onMouseEnter={()=>{setImgHover(true)}} onMouseLeave={()=>setImgHover(false)}>
                                     {imageUrl ?
                                     <img src = {imageUrl} alt="pfp" width={200} height={200} 
                                     className="rounded-full hover:grayscale z-10"/> : <FaRegUser color="yellow" size={30} />}
                                     <p className={'relative bottom-28 text-white transition-opacity duration-300 ' + (imgHover ? "opacity-100" : "opacity-0")}>Change Picture</p>    
                                 </label>
                                 
-                                <input type="file" id="img_id" className='hidden' onChange={uploadImage}/>
+                                <button
+                                    className="hidden"
+                                    type="button"
+                                    id = "popup_btn"
+                                    onClick={() => setShowModal(true)}
+                                >
+                                </button>
                                 <b><code><h1 className="text-3xl text-yellow-300">{profileData.username}</h1></code></b>
                             </div>
                         </div>
@@ -194,6 +209,43 @@ export default function UpdateProfile(){
                             <button onClick={uploadBio}
                             className='bg-gray-800 text-yellow-300 w-fit rounded-lg p-2 hover:bg-slate-600 hover:scale-105' disabled = {newBio.length > 150}>{newBio.length > 150 ? "Word Limit Exceeded" : "Change"}</button>
                         </div>
+                       {showModal ? (
+                         <>
+                            <div
+                                className="text-yellow-300 justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                            >
+                                <div className="relative w-auto my-5 mx-auto max-w-3xl">
+                                {/*content*/}
+                                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full matchColor outline-none focus:outline-none">
+                                    {/*header*/}
+                                    <div className="flex items-start justify-between p-5 rounded-t text-center gap-3">
+                                    <h3 className="text-3xl font-semibold">
+                                        Change Profile Picture
+                                    </h3>
+                                    <button
+                                        className=" ml-auto border-0 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                                        onClick={() => setShowModal(false)}
+                                    >
+                                        <div className='text-red-600 h-6 w-6 text-2xl block focus:outline-none opacity-100'>
+                                            X
+                                        </div>
+                                    </button>
+                                    </div>
+                                    {/*body*/}
+                                    <div className='flex flex-row gap-2 justify-between p-4'>
+                                        <button className='p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all'>Add From Gallery</button>
+                                        <button className='p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all'>Remove Profile Picture</button>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                        </>
+                        ) : null}
+
+
+
+
                     </div>
                     <div className='flex flex-row'>
                         <div className='flex flex-col'>

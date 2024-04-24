@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const connectDB = require('./mongoDB/connect');
 const login = require('./routes/login');
 const post_blog = require('./routes/blog');
@@ -15,8 +14,8 @@ const search_users = require('./routes/search_users');
 const like_toggler = require('./routes/toggle_likes');
 const pfp = require('./routes/profilepicture');
 const update_bio = require('./routes/update_bio');
-
-
+const path = require('path');
+const app = express();
 require('dotenv').config();
 
 app.use((req, res, next) => {
@@ -39,6 +38,7 @@ const startDB  = async()=>{
     }
 }
 startDB();
+app.use('/public', express.static(path.join(__dirname, 'uploads')));
 app.use('/login',login);
 app.use('/signup',signup);
 app.use('/post-blog',post_blog);

@@ -140,27 +140,20 @@ export default function BlogPage(){
         setComplete(true);
     }
     const [imageUrl, setImageUrl] = useState('');
-    useEffect(() => {
-        let objectUrl; // Declare a variable to store the object URL
+    useEffect(()=>{
         const fetchData = async () => {
-          try {
-            const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
-              method: 'GET',
+            try {
+                const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
+                method: 'GET',
             });
-            const blob = await response.blob(); // Convert response to a Blob object
-            objectUrl = URL.createObjectURL(blob); // Convert Blob to a data URL
-            setImageUrl(objectUrl);
-          } catch (error) {
-            console.error('Error fetching image:', error);
-          }
+            const result = await response.json();
+            setImageUrl(result.url);
+            } catch (error) {
+                console.error('Error fetching image:', error);
+            }
         };
         fetchData();
-        return () => {
-          if (objectUrl) {
-            URL.revokeObjectURL(objectUrl);
-          }
-        };
-    });
+    },[]);
     VerifyUser();
     const writtenBy =  (<div className="flex flex-col items-center">
                             {imageUrl ? <img src = {imageUrl} alt="pfp" width={35} height={35} className="rounded-full"/> : <FaRegUser color="yellow" size={30} />}
