@@ -17,6 +17,7 @@ const upload_pfp = async (req, res) => {
   try {
     const file = req.file; 
     const user_id = req.body.user_id; 
+    console.log(user_id);
     console.log(file);
     const user = await User.find({_id: user_id});
     if(!user){

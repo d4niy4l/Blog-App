@@ -11,9 +11,16 @@ import Modal from '../Components/Modal';
 
 import axios from 'axios';
 
-
+function changeUsernameForm(){
+    return(
+        <div>
+            
+        </div>
+    )
+}
 
 export default function UpdateProfile(){
+    VerifyUser();
     const navigate = useNavigate();
     const [cookie] = useCookies();
     const location = useLocation();
@@ -24,13 +31,13 @@ export default function UpdateProfile(){
     const [profileData,setProfileData] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [imageUrl,setImageUrl] = useState('');
-    const [imageSrc, setImageSrc] = useState('');
+    const [imageSrc, setImageSrc] = useState();
     const [imgHover, setImgHover] = useState(false);
     const [newBio, setNewBio] = useState('');
     const [dimensions, setDimensions] = useState({});
-    const bio_ref = useRef(null);     
+    const bio_ref = useRef(null);   
+   
     const jwt = jwtDecode(cookie.jwt);                         
-    VerifyUser();
     const bioOnChange = (event)=>{
         const { value } = event.target;
         setNewBio(value);
@@ -39,10 +46,31 @@ export default function UpdateProfile(){
         alert('Invalid Token');
         navigate('/Login');
     }
-
+    
+    useEffect(() => {
+        console.log('hello')
+        const verify_user = async () => {
+            if (typeof cookie.jwt !== 'string') {
+                console.log("No JWT found in cookies. Redirecting to /Login.");
+                navigate('/Login');
+            } else {
+                const res = await fetch('http://localhost:5000/verify', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const result = await res.json();
+                console.log("Verification Result:", result);
+            }
+        };
+        verify_user();
+    }, [cookie, navigate]);
     const uploadImage = async (e) => {
         try {
           const file = e.target.files[0]; 
+          console.log(file);
           setImageSrc(file);
       
           const formData = new FormData();
@@ -98,6 +126,7 @@ export default function UpdateProfile(){
 
 
     useEffect(() => {
+        if(!cookie.jwt)  navigate('/Login');
         const getUserData = async ()=>{
             const token = jwtDecode(cookie.jwt);
             if(!token) navigate('/Login');
@@ -120,6 +149,8 @@ export default function UpdateProfile(){
     
         
     }, []);
+
+ 
 
     useEffect(()=>{
         const fetchData = async () => {
@@ -174,11 +205,10 @@ export default function UpdateProfile(){
 
 
 
-    VerifyUser();
     return(
         <div className='flex flex-col overflow-x-hidden gap-5 w-screen'>
             <UserNavbar query = 'Search Profiles'/>
-            <div className="flex flex-col">
+            <div className="flex flex-col matchColor gap-3">
                     <div className="flex flex-row align-middle justify-center gap-2 matchColor p-5">
                         <div className="flex flex-col gap-3 p-3 align-middle items-center">
                             <div className='flex flex-col align-middle justify-center gap-2'>
@@ -233,7 +263,13 @@ export default function UpdateProfile(){
                                     </div>
                                     {/*body*/}
                                     <div className='flex flex-row gap-2 justify-between p-4'>
-                                        <button className='p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all'>Add From Gallery</button>
+                                        <input type = 'file' id = 'img_upload' className= 'hidden' onChange={uploadImage}/>
+                                        <label htmlFor='img_upload'>
+                                 
+                                            <button className='p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all' onClick = {()=>{document.getElementById('img_upload').click()}}>
+                                                Add From Gallery
+                                            </button>
+                                        </label>
                                         <button className='p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all'>Remove Profile Picture</button>
                                     </div>
                                 </div>
@@ -247,15 +283,11 @@ export default function UpdateProfile(){
 
 
                     </div>
-                    <div className='flex flex-row'>
-                        <div className='flex flex-col'>
-                            <Input label = 'Old Password' />
-                            <Input label= 'New Password'/>
-                            <Input label = 'Confirm Password' />
-                        </div>
-
-                        <div>
-
+                    <div className='flex flex-col matchColor gap-5 align-middle justify-center p-5'>
+                        <div className='flex flex-col matchColor gap-5 items-center'>
+                            <button class="text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE USERNAME</button>
+                            <button class="text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE PASSWORD</button>
+                            <button class="text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE EMAIL</button>
                         </div>
                     </div>
             </div>

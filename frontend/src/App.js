@@ -16,6 +16,7 @@ import UpdateProfile from './MainPages/UpdateProfile';
 import React from 'react';
 function App() {
   const [log,setLog] = useState(false);
+   
   const [user,setUser] = useState({
     username: '',
     email: '',
