@@ -3,9 +3,8 @@ import VerifyUser from "../authPage/VerifyUserHook";
 import Footer from "../Components/Footer";
 import UserNavbar from "../Components/UserNavbar";
 import BlogCard from "../Components/BlogCard";
-import logo from './../authPage/logo.png'
+import logo from './../logo.png'
 import Pagination from "../Components/Pagination";
-import {debounce} from 'lodash'
 export default function MainPage(){
     VerifyUser();
     const [blogs, setBlogs] = useState([]);

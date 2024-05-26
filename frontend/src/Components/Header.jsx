@@ -1,4 +1,4 @@
-import logo from './../authPage/logo.png'
+import logo from './../logo.png'
 import { useNavigate, useLocation } from "react-router-dom";
 export default function Header(prop){
     const navigate = useNavigate();

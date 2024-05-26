@@ -14,7 +14,7 @@ import axios from 'axios';
 function changeUsernameForm(){
     return(
         <div>
-            
+
         </div>
     )
 }
@@ -31,7 +31,6 @@ export default function UpdateProfile(){
     const [profileData,setProfileData] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [imageUrl,setImageUrl] = useState('');
-    const [imageSrc, setImageSrc] = useState();
     const [imgHover, setImgHover] = useState(false);
     const [newBio, setNewBio] = useState('');
     const [dimensions, setDimensions] = useState({});
@@ -68,36 +67,37 @@ export default function UpdateProfile(){
         verify_user();
     }, [cookie, navigate]);
     const uploadImage = async (e) => {
-        try {
-          const file = e.target.files[0]; 
-          console.log(file);
-          setImageSrc(file);
-      
-          const formData = new FormData();
-          formData.append('image', imageSrc);
-      
-          formData.append('user_id', profileData.id);
-      
-          const response = await axios.post('http://localhost:5000/pfp', formData, {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            } 
-          });
-      
-          if (response.status === 200) {
-            const result = response.data; // Assuming the server returns JSON data
-            setImageUrl(result.imageUrl);
-            console.log(result);
-          } else {
-            alert('Unexpected error, please login again');
-            navigate('/Login');
+      const file = e.target.files[0]; 
+      console.log(file);
+      if (file){
+          try {
+            const formData = new FormData();
+            formData.append('image', file);
+        
+            formData.append('user_id', profileData.id);
+        
+            const response = await axios.post('http://localhost:5000/pfp', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+        
+            if (response.status === 200) {
+              const result = response.data; // Assuming the server returns JSON data
+              setImageUrl(result.imageUrl);
+              console.log(result);
+            } else {
+              alert('Unexpected error, please login again');
+              navigate('/Login');
+            }
+            e.target.value = '';
+          } catch (err) {
+            console.log('Error uploading image: ', err);
           }
-          e.target.value = '';
-        } catch (err) {
-          console.log('Error uploading image: ', err);
+
         }
       }
-
+        
     const uploadBio = async (event)=>{
         event.preventDefault();
         const result = await fetch('http://localhost:5000/update-bio',{
@@ -285,9 +285,9 @@ export default function UpdateProfile(){
                     </div>
                     <div className='flex flex-col matchColor gap-5 align-middle justify-center p-5'>
                         <div className='flex flex-col matchColor gap-5 items-center'>
-                            <button class="text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE USERNAME</button>
-                            <button class="text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE PASSWORD</button>
-                            <button class="text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE EMAIL</button>
+                            <button class="font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE USERNAME</button>
+                            <button class=" font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE PASSWORD</button>
+                            <button class= " font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE EMAIL</button>
                         </div>
                     </div>
             </div>

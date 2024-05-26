@@ -1,5 +1,5 @@
 import React from "react";
-import logo from './../authPage/logo.png'
+import logo from './../logo.png'
 import {useCookies} from 'react-cookie';
 import {useNavigate} from 'react-router-dom';
 import {VscArrowUp} from 'react-icons/vsc';

@@ -16,6 +16,7 @@ const pfp = require('./routes/profilepicture');
 const update_bio = require('./routes/update_bio');
 const path = require('path');
 const app = express();
+const bodyParser = require('body-parser');
 require('dotenv').config();
 
 app.use((req, res, next) => {
@@ -28,6 +29,8 @@ app.use((req, res, next) => {
 app.use(cookie_parser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 const startDB  = async()=>{
     try{
         await connectDB(process.env.MONGO_URI);

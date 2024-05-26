@@ -1,9 +1,7 @@
 const Image = require('./../mongoDB/profile_picture');
 const User = require('./../mongoDB/users');
-const path = require('path');
 
 
-const defaultProfilePicturePath = '/public/pfp.jpg';
 const get_profilepicture = async (req, res) => {
     try {
         const userId = req.query.user_id;
@@ -11,13 +9,10 @@ const get_profilepicture = async (req, res) => {
         if (!user) {
             return res.status(404).send('User not found');
         }
+        const pfp = await Image.findOne({user: userId});
+        if (pfp) {
+            res.status(200).json({url: pfp.imageUrl});
 
-        if (user.profilePicture) {
-            const image = await Image.find({user: user._id});
-            if (!image) {
-                return res.status(404).send('Profile picture not found');
-            }
-            res.send(image.imageUrl);
         } else {
             const image_url = `http://${req.headers.host}/public/pfp.jpg`;
             res.status(200).json({url: image_url});

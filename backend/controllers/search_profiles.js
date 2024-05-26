@@ -9,7 +9,7 @@ const search_profiles = async (req,res)=>{
         const endIndex = page * limit;
         const regex = new RegExp(query, 'i');
         const size = await User.countDocuments();
-        const users = await User.find({title: {$regex: regex}}).limit(limit).skip(startIndex);
+        const users = await User.find({username: {$regex: regex}}).limit(limit).skip(startIndex);
         pagination = {};
         if (startIndex > 0) {
             pagination.prev = {

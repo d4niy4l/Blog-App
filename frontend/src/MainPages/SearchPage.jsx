@@ -2,10 +2,11 @@ import VerifyUser from "../authPage/VerifyUserHook";
 import Footer from "../Components/Footer";
 import UserNavbar from "../Components/UserNavbar";
 import BlogCard from "../Components/BlogCard";
-import logo from './../authPage/logo.png'
+import logo from './../logo.png'
 import Pagination from "../Components/Pagination";
 import { useLocation, useNavigate } from 'react-router-dom';
 import {useState, useEffect} from 'react';
+import ProfileCard from "../Components/ProfileCard";
 export default function SearchPage(){
     VerifyUser();
     const location = useLocation();
@@ -33,10 +34,22 @@ export default function SearchPage(){
         }
         console.log(type);
         const searchUsers = async()=>{
-
+            const res = await fetch(`http://localhost:5000/search-users?query=${queryContent}&limit=${encodeURIComponent(limit)}&page=${encodeURIComponent(currentPage)}`,{
+                method: 'GET',
+            });
+            const result = await res.json();
+            if(res.status !== 200) {
+                console.log('error');
+                return;
+            }
+            console.log(result);
+            setItems(result.items);
         }
         if (type === 2)
             searchBlogs();
+        if (type === 1)
+            searchUsers();
+        console.log(type);
     },[refresh])
         return(
             <div className="flex flex-col gap-4 justify-center align-middle w-screen">
@@ -47,12 +60,15 @@ export default function SearchPage(){
                  <h1 className="text-white text-3xl">LOGGO</h1>
             </div>
             <div className="flex flex-col justify-center items-center gap-3 ">
-                <h1 className="text-2xl text-yellow-300">{items.length > 0 ?`RESULTS FOR SEARCH ${queryContent.toUpperCase()}` : `NO RESULTS FOR ${queryContent}`}</h1>
+                <h1 className="text-2xl text-yellow-300">{items.length > 0 ?`RESULTS FOR SEARCH ${queryContent.toUpperCase()}` : `NO RESULTS FOR ${queryContent.toUpperCase()}`}</h1>
             </div>
             <div className="mx-auto max-w-screen-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {
                     items.map((val,index)=>{
-                        return <BlogCard author = {val.author} body = {val.body} main = {true} title = {val.title} id = {val.id} key = {index} likes = {val.likes}/>
+                        if(type === 2)
+                            return <BlogCard author = {val.author} body = {val.body} main = {true} title = {val.title} id = {val.id} key = {index} likes = {val.likes}/>
+                        else if(type == 1)
+                            return <ProfileCard username= {val.username}  user_id={val._id} />
                     }
                     )
                 }

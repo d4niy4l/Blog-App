@@ -4,7 +4,7 @@ import { FaLinkedin } from "react-icons/fa";
 import {DiReact,DiNodejs,DiMongodb} from 'react-icons/di'
 import { Link } from "react-router-dom";
 import { useState } from 'react'
-import logo from './../authPage/logo.png'
+import logo from './../logo.png'
 export default function Footer(){
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     return(

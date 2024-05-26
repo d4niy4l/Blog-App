@@ -1,6 +1,8 @@
 const multer = require('multer');
 const Image = require('./../mongoDB/profile_picture');
 const User = require('./../mongoDB/users');
+const FS = require('fs');
+const path = require('path');
 const { v4: UUIDV4 } = require('uuid');
 
 const storage = multer.diskStorage({
@@ -23,15 +25,29 @@ const upload_pfp = async (req, res) => {
     if(!user){
       return res.status(404).json({message:'user not found'});
     }
-    const image_url = `http://${req.headers.host}/${file.path}`;
-    const image = new Image({
-      fileName: file.filename,
-      filePath: file.path,
-      imageUrl: image_url,
-      user: user_id
-    });
-    await image.save()
-    return res.status(200).json({ imageUrl: imageUrl });
+    const image_url = `http://${req.headers.host}/public/${file.filename}`;
+    const pfp = await Image.findOne({user: user_id});
+    console.log(pfp);
+    if(pfp){
+        FS.unlink(path.join(__dirname, '..', pfp.filePath), (err) => {
+          if (err) console.error('Error deleting old file:', err);
+          else console.log('Old file deleted:', pfp.filePath);
+        });
+        pfp.fileName = file.filename;
+        pfp.filePath = file.path;
+        pfp.imageUrl = image_url;
+        await pfp.save();
+     }
+     else{
+      const image = new Image({
+        fileName: file.filename,
+        filePath: file.path,
+        imageUrl: image_url,
+        user: user_id
+      });
+      await image.save()
+    }
+    return res.status(200).json({ imageUrl: image_url });
   }catch(err){
       console.log(err);
       return res.status(500).json({message: 'Internal Server Error'});

@@ -1,6 +1,6 @@
 
 import { useState, useRef } from 'react';
-import logo from './logo.png'
+import logo from './../logo.png'
 import { Link,useNavigate } from 'react-router-dom';
 import {Input, Button} from '@material-tailwind/react'
 import {useCookies} from 'react-cookie';

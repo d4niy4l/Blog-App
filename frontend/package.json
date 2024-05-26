@@ -1,5 +1,5 @@
 {
-  "name": "blog",
+  "name": "bloggo",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://127.0.0.1:5000/",
@@ -24,6 +24,7 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.1"
   },
+
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

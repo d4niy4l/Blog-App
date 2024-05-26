@@ -2,7 +2,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useRef} from 'react';
 import { Input, Button } from '@material-tailwind/react';
-import logo from './logo.png';
+import logo from './../logo.png'
 export default function SignForm(){
     const navigate = useNavigate();
     const username = useRef(null);

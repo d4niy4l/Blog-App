@@ -80,6 +80,7 @@ export default function ProfilePage(props){
       fetchData();
   },[]);
     const date = new Date(profileData.date);
+    
     return( 
   <div className="flex flex-col overflow-x-hidden gap-5 w-screen">
   <UserNavbar query = 'Search Profiles'/>
@@ -101,7 +102,7 @@ export default function ProfilePage(props){
             {profileData.id === jwtDecode(cookie.jwt).id ? <div className="flex flex-row justify-center">
                 <Button onClick={()=>navigate(`/Update?username=${encodeURIComponent(profileData.username)}&id=${encodeURIComponent(profileData.id)}`)}
                  className="text-yellow-300 hover:text-red-700 transition-all hover:scale-105">EDIT PROFILE</Button>
-            </div> : <hr/>}
+            </div> : <hr/>} 
             <div className="flex text-yellow-300 justify-center">
                 <code>Date Joined: {date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() }</code>
             </div>

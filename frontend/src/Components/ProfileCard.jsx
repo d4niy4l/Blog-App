@@ -1,36 +1,37 @@
-import { useState } from 'react';
-import { useCookies } from 'react-cookie';
-import { jwtDecode } from 'jwt-decode';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaRegUser } from "react-icons/fa";
 
-
-export default function ProfileCard({username}){
+export default function ProfileCard({username, user_id,  joined_date}){
     const [imageUrl, setImageUrl] = useState('');
-    const [cookie] = useCookies();
-    const jwt = jwtDecode(cookie.jwt);
-    useEffect(() => {
-        let objectUrl; // Declare a variable to store the object URL
-        const fetchData = async () => {
+    const navigate = useNavigate();
+    const date = new Date(joined_date);
+    useEffect(()=>{
+      const fetchData = async () => {
           try {
-            const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
+              const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(user_id)}`, {
               method: 'GET',
-            });
-            const blob = await response.blob(); // Convert response to a Blob object
-            objectUrl = URL.createObjectURL(blob); // Convert Blob to a data URL
-            setImageUrl(objectUrl);
+          });
+          const result = await response.json();
+          setImageUrl(result.url);
           } catch (error) {
-            console.error('Error fetching image:', error);
+              console.error('Error fetching image:', error);
           }
-        };
-        fetchData();
-        return () => {
-          if (objectUrl) {
-            URL.revokeObjectURL(objectUrl);
-          }
-        };
+      };
+      fetchData();
+  },[]);
     return(
-        <div>
-
-        </div>
+      <div className="flex flex-col p-3 gap-2 matchColor rounded-lg">
+      <div className="flex flex-col gap-1 p-3 align-middle items-center">
+          {imageUrl ? <img src = {imageUrl} alt="pfp" width={75} height={75} className="rounded-full"/> : <FaRegUser color="yellow" size={30} />}
+          <b><h1 className="text-3xl text-yellow-300">{username}</h1></b>
+      </div>
+      <div>
+        <button onClick={()=>navigate(`/Profile?username=${encodeURIComponent(username)}`)} 
+        class="font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">
+          VISIT</button>
+      </div>
+    </div>
 
     )
 }
