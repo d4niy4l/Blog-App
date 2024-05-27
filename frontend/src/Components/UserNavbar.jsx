@@ -156,12 +156,13 @@ export default function UserNavbar(props) {
             },
         })
         const result = await res.json();
+        console.log()
         setUserData({
           username: result.username,
           id: result.id
         });
         console.log(result);
-        if(!result.status) navigate('/Login');
+       // if(!result.status) navigate('/Login');
         
         return result;
  }
