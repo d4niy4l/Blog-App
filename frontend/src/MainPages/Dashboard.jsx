@@ -46,7 +46,7 @@ export default function DashBoard(){
       console.error(err);
     }
   }
-   VerifyUser(); 
+   //VerifyUser(); 
     useEffect(() => {
       const fetchData = async () => {
         try {
