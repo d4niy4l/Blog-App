@@ -25,7 +25,7 @@ router.route('/').get((req,res)=>{
       httpOnly: false,
       maxAge: session_age
     });
-    res.status(200).json({username: user[0].username, id: user[0].id});
+    return res.status(200).json({username: user[0].username, id: user[0].id});
   } 
   catch(err){
         console.log('ERROR: ',err);

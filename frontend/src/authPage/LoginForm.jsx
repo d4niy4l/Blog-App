@@ -3,7 +3,6 @@ import { useState, useRef } from 'react';
 import logo from './../logo.png'
 import { Link,useNavigate } from 'react-router-dom';
 import {Input, Button} from '@material-tailwind/react'
-import {useCookies} from 'react-cookie';
 import React from "react";
 
 export default function LoginForm(props){
@@ -37,7 +36,6 @@ export default function LoginForm(props){
                 setExist("");
                 props.log(true);
                // props.setLogged(result);
-                console.log(props.logged);
                 //localStorage.setItem("user",JSON.stringify(result));
                 //console.log("data: ",result);
                 navigate(`/DashBoard?username=${encodeURIComponent(result.username)}&id=${encodeURIComponent(result.id)}`);
