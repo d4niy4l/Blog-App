@@ -17,6 +17,7 @@ const update_bio = require('./routes/update_bio');
 const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
+const cors = require('cors')
 require('dotenv').config();
 app.use(cors({
     origin: 'https://bloggo-five.vercel.app',
