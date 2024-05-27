@@ -27,12 +27,12 @@ export default function LandingPage(){
                             <h4>SHARE YOUR NOTES WITH OTHERS</h4>
                         </div>
                         <div className='text-yellow-300 flex xs:flex-row xxs:flex-col gap-5 align-middle justify-center xxs:items-center'>
-                            <button className='bg-gray-700 xxs:p-3 xs:text-xl xs:p-5 rounded-lg hover:bg-slate-400 hover:scale-110 transition-all'
+                            <button className='bg-gray-700 xxs:p-2 xs:text-xl rounded-lg hover:bg-slate-400 hover:scale-110 transition-all'
                                 onClick={gotoLogin} 
                             >
                                 LOGIN
                             </button>
-                            <button className='bg-gray-700 xxs:p-3 xs:text-xl rounded-lg xs:p-5 hover:bg-slate-400 hover:scale-110 transition-all'
+                            <button className='bg-gray-700 xxs:p-2 xs:text-xl rounded-lg  hover:bg-slate-400 hover:scale-110 transition-all'
                                     onClick = {gotoSignin}
                             >
                                 SIGNUP
