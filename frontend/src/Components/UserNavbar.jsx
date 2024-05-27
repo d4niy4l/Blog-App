@@ -144,32 +144,32 @@ export default function UserNavbar(props) {
       onClick: () => navigate("/Blogs")
     },
   ];
-  useEffect(()=>{
-    const verify_user = async()=>{
-    if(!cookie.jwt)
-        navigate('/Login');
-    else{ 
+  // useEffect(()=>{
+  //   // const verify_user = async()=>{
+  //   // if(!cookie.jwt)
+  //   //     navigate('/Login');
+  //   // else{ 
         
-        const res = await fetch('http://localhost:5000/verify',{
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        const result = await res.json();
-        setUserData({
-          username: result.username,
-          id: result.id
-        });
-        console.log(result);
-        if(!result.status) navigate('/Login');
+  //   //     const res = await fetch('http://localhost:5000/verify',{
+  //   //         method: 'POST',
+  //   //         credentials: 'include',
+  //   //         headers: {
+  //   //             'Content-Type': 'application/json',
+  //   //         },
+  //   //     })
+  //   //     const result = await res.json();
+  //   //     setUserData({
+  //   //       username: result.username,
+  //   //       id: result.id
+  //   //     });
+  //   //     console.log(result);
+  //   //     if(!result.status) navigate('/Login');
         
-        return result;
-    }
- }
- verify_user();
-},[]);
+  //   //     return result;
+  //   }
+//  }
+//  verify_user();
+// },[]);
   React.useEffect(() => {
     window.addEventListener(
       "resize",
