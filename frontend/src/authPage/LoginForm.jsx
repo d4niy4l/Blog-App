@@ -12,6 +12,7 @@ export default function LoginForm(props){
     const username = useRef(null);
     const password = useRef(null);
     const apiUrl = process.env.REACT_APP_API_URL;
+    console.log(apiUrl);
     const handleSubmit = async(event)=>{
         try{
             event.preventDefault();
