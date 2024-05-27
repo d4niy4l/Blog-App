@@ -8,17 +8,17 @@ import React from "react";
 
 export default function LoginForm(props){
     const navigate = useNavigate();
-    const [cookies,setCookies] = useCookies([]);
     const[exists,setExist] = useState('');
     const username = useRef(null);
     const password = useRef(null);
+    const apiUrl = process.env.REACT_APP_API_URL;
     const handleSubmit = async(event)=>{
         try{
             event.preventDefault();
             const formData = {
             username: username.current.value, password: password.current.value
             }
-            const res = await fetch('http://localhost:5000/login',{
+            const res = await fetch(`${apiUrl}/login`,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

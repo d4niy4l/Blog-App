@@ -1,13 +1,11 @@
 import UserNavbar from './../Components/UserNavbar';
 import Footer from './../Components/Footer';
-import { Input } from '@material-tailwind/react';
 import { useLocation, useNavigate } from 'react-router-dom'
 import VerifyUser from '../authPage/VerifyUserHook';
 import { jwtDecode } from 'jwt-decode';
 import { useCookies } from 'react-cookie';
 import { useEffect, useState, useRef } from 'react';
 import { FaRegUser } from "react-icons/fa";
-import Modal from '../Components/Modal';
 
 import axios from 'axios';
 

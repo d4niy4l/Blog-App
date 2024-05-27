@@ -15,35 +15,32 @@ export default function MainPage(){
     const [index, setIndex] = useState(0);
     const limit = 6;
     const apiUrl = process.env.REACT_APP_API_URL;
-    useEffect(()=>{
-        const filter = () => {
-            if(index === 0){
-                blogs.sort((a,b)=>{
-                    const a_date = new Date(a);
-                    const b_date = new Date(b);
-                    return a_date - b_date;
-                })
-            }
-            else if(index === 1){
-                blogs.sort((a,b)=>{
-                    const a_date = new Date(a);
-                    const b_date = new Date(b);
-                    return b_date - a_date;
-                })
-            }
-            else if(index === 2){
-                blogs.sort((a,b)=>{
-                    if(a.likes.length !== b.likes.length){
-                        return b.a.likes.length - a.likes.length;
-                    }
-                    else{
-                        return b.comments.length - a.comments.length;
-                    }
-                })
+    useEffect(() => {
+        const filter = ()=>{
+            if (index === 0) {
+            setBlogs(prevBlogs => [...prevBlogs].sort((a, b) => {
+                const a_date = new Date(a.date);
+                const b_date = new Date(b.date);
+                return a_date - b_date;
+            }));
+            } else if (index === 1) {
+            setBlogs(prevBlogs => [...prevBlogs].sort((a, b) => {
+                const a_date = new Date(a.date);
+                const b_date = new Date(b.date);
+                return b_date - a_date;
+            }));
+            } else if (index === 2) {
+            setBlogs(prevBlogs => [...prevBlogs].sort((a, b) => {
+                if (a.likes.length !== b.likes.length) {
+                return b.likes.length - a.likes.length;
+                } else {
+                return b.comments.length - a.comments.length;
+                }
+            }));
             }
         }
         filter();
-    },[index])
+      }, [index]);
     
     useEffect(() => {
         const getData = async () => {

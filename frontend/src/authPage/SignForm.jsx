@@ -15,6 +15,7 @@ export default function SignForm(){
     const [passMatch, setPassMatch] = useState(true);
     const  [match, setMatch] = useState('');
     const [exists, setExists] = useState('');
+    const apiUrl = process.env.REACT_APP_API_URL;
     const isValidEmail = (email)=>{
         const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return regex.test(email);
@@ -65,7 +66,7 @@ export default function SignForm(){
             password: password.current.value,
             email: email.current.value
         }
-        const res = await fetch('http://localhost:5000/signup',{
+        const res = await fetch(`${apiUrl}/signup`,{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'
@@ -87,7 +88,7 @@ export default function SignForm(){
         <div className='bg-gradient-to-tl from-violet-900 via-gray-800 to-red-700 shadow-md rounded-lg px-5 py-3 w-full max-w-sm'>
             <div className='flex flex-col gap-6'>
                 <div className = 'text-white  flex flex-col align-middle items-center gap-3 '>
-                    <img src = {logo} width = "10%" height = "10%"/>    
+                    <img src = {logo} width = "10%" height = "10%" alt='logo'/>    
                     <h4 style = {{color: 'white'}}><b>JOIN US</b></h4>
                 </div>
                 <div className='w-full bg-white h-0.5'></div>

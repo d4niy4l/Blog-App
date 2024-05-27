@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 export default function VerifyUser() {
     const [cookies] = useCookies(['jwt']);
     const navigate = useNavigate();
-
+    const apiUrl = process.env.REACT_APP_API_URL;
     useEffect(() => {
         const verify_user = async () => {
             if (typeof cookies.jwt !== 'string') {
@@ -13,7 +13,7 @@ export default function VerifyUser() {
                 navigate('/Login');
             } else {
                 try {
-                    const res = await fetch('http://localhost:5000/verify', {
+                    const res = await fetch(`${apiUrl}/verify`, {
                         method: 'POST',
                         credentials: 'include',
                         headers: {
@@ -23,7 +23,6 @@ export default function VerifyUser() {
                     });
                     if (res.ok) {
                         const result = await res.json();
-                        console.log("Verification Result:", result);
                         // You can add additional logic based on the verification result if needed
                     } else {
                         console.log("Verification failed. Redirecting to /Login.");
