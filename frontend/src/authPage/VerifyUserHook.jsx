@@ -9,7 +9,7 @@ export default function VerifyUser() {
     useEffect(() => {
         const verify_user = async () => {
             if (typeof cookies.jwt !== 'string') {
-                console.log(typeof cookies.jwt);
+                console.log('type: ',typeof cookies.jwt);
                 navigate('/Login');
             } else {
                 try {
