@@ -19,24 +19,25 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors')
 require('dotenv').config();
-app.use(cors({
-    origin: 'https://bloggo-five.vercel.app',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  }));
+// app.use(cors({
+//     origin: '*',
+//     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true,
+//   }));
   
-// app.use((req, res, next) => {
-//     const allowedOrigins = ["https://bloggo-five.vercel.app"];
-//     const origin = req.headers.origin;
-//     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE");
-//     res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
-//     res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow credentials
-//     if (allowedOrigins.includes(origin)) {
-//         res.setHeader("Access-Control-Allow-Origin", origin);
-//     }
-//     next();
-// });
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200);
+    }
+    next();
+  });
 app.use(cookie_parser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
