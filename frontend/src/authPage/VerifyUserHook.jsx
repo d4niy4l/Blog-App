@@ -8,10 +8,6 @@ export default function VerifyUser() {
     const apiUrl = process.env.REACT_APP_API_URL;
     useEffect(() => {
         const verify_user = async () => {
-            // if (typeof cookies.jwt !== 'string') {
-            //     console.log('type: ',typeof cookies.jwt);
-            //     navigate('/Login');
-            // } else {
                 try {
                     const res = await fetch(`${apiUrl}/verify`, {
                         method: 'POST',
@@ -32,7 +28,6 @@ export default function VerifyUser() {
                     console.error("Error during verification:", error);
                     navigate('/Login');
                 }
-           // }
         };
 
         verify_user();
