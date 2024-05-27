@@ -5,11 +5,11 @@ import { FaRegUser } from "react-icons/fa";
 export default function ProfileCard({username, user_id,  joined_date}){
     const [imageUrl, setImageUrl] = useState('');
     const navigate = useNavigate();
-    const date = new Date(joined_date);
+    const apiUrl = process.env.REACT_APP_API_URL;
     useEffect(()=>{
       const fetchData = async () => {
           try {
-              const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(user_id)}`, {
+              const response = await fetch(`${apiUrl}/pfp?user_id=${encodeURIComponent(user_id)}`, {
               method: 'GET',
           });
           const result = await response.json();

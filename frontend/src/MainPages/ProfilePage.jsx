@@ -10,7 +10,7 @@ import VerifyUser from "../authPage/VerifyUserHook";
 import {useCookies} from 'react-cookie';
 import { jwtDecode } from "jwt-decode";
 import { FaRegUser } from "react-icons/fa";
-export default function ProfilePage(props){
+export default function ProfilePage(){
     const navigate = useNavigate();
     const location = useLocation();
     const query = new URLSearchParams(location.search);
@@ -20,12 +20,12 @@ export default function ProfilePage(props){
     const [data, setData] = useState([]);
     const [imageUrl, setImageUrl] = useState('');
     const jwt = jwtDecode(cookie.jwt);
-     
+    const apiUrl = process.env.REACT_APP_API_URL;
    VerifyUser(); 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/post-blog?author=${username}`, {
+        const res = await fetch(`${apiUrl}/post-blog?author=${username}`, {
           method: 'GET',
         });
         if (res.status === 200) {
@@ -48,7 +48,7 @@ export default function ProfilePage(props){
             const token = jwtDecode(cookie.jwt);
             if(!token) navigate('/Login');
             const id = token.id;
-            const res = await fetch(`http://localhost:5000/user?username=${encodeURIComponent(username)}`,{
+            const res = await fetch(`${apiUrl}/user?username=${encodeURIComponent(username)}`,{
                 method : 'POST',
             });
             const result = await res.json();
@@ -68,7 +68,7 @@ export default function ProfilePage(props){
     useEffect(()=>{
       const fetchData = async () => {
           try {
-              const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
+              const response = await fetch(`${apiUrl}/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
               method: 'GET',
           });
           const result = await response.json();

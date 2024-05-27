@@ -15,7 +15,7 @@ export default function DashBoard(){
     const [wordCount, setCount] = useState(0);
     const [serverError, setError] = useState(false);
     const [inputError, setInputError] = useState(false);
-
+    const apiUrl = process.env.REACT_APP_API_URL;
     const [formData, setFormData] = useState({
         title: '',
         body: '',
@@ -31,7 +31,7 @@ export default function DashBoard(){
 
     const deleteAll = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/post-blog`, {
+        const res = await fetch(`${apiUrl}/post-blog`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export default function DashBoard(){
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const res = await fetch(`http://localhost:5000/post-blog?author=${username}`, {
+          const res = await fetch(`${apiUrl}/post-blog?author=${username}`, {
             method: 'GET',
           });
           if (res.status === 200) {
@@ -88,7 +88,7 @@ export default function DashBoard(){
           title: title.current.value,
           author: username
         })
-        const res = await fetch('http://localhost:5000/post-blog',{
+        const res = await fetch(`${apiUrl}/post-blog`,{
           method: 'POST',
           headers:{
             'Content-Type': 'application/json'

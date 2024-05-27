@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useState } from 'react'
 import logo from './../logo.png'
 export default function Footer(){
-    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+    const [currentYear] = useState(new Date().getFullYear());
     return(
         <div className = 'bg-black flex flex-col w-full h-fit pt-10 pb-5 sticky top-[100vh]'>
             <div className="flex flex-col text-white align-middle justify-center gap-2 p-5"> 

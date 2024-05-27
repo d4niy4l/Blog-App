@@ -10,11 +10,12 @@ export function CommentBoxTextarea(props) {
     const {value} = event.target;
     setNewComment(value);
     console.log(newComment);
-  }
+  }   
+  const apiUrl = process.env.REACT_APP_API_URL;
   const postComment = async()=>{
     try{ 
       const jwt= jwtDecode(cookie.jwt);
-      const res = await fetch('http://localhost:5000/comment',{
+      const res = await fetch(`${apiUrl}/comment`,{
           method: 'POST',
           headers:{
               'Content-Type': 'application/json'

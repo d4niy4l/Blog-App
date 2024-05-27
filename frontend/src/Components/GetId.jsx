@@ -2,7 +2,7 @@ import {useCookies} from 'react-cookie';
 import {useNavigate} from 'react-router-dom'
 import { useEffect } from 'react';
 export default async function GetId(){
-    const [cookie,setCookie,removeCookie] = useCookies([]);
+    const [cookie] = useCookies([]);
     const navigate = useNavigate();
     useEffect(()=>{
         const verify_user = async()=>{

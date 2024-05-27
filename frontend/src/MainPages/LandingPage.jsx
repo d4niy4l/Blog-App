@@ -4,10 +4,10 @@ import Header from '../Components/Header'
 import Footer from '../Components/Footer';
 export default function LandingPage(){
     const navigate = useNavigate();
-   const gotoLogin = (event)=>{
+   const gotoLogin = ()=>{
         navigate('/Login');
    }
-   const gotoSignin = (event)=>{
+   const gotoSignin = ()=>{
         navigate('/Signup');
    }
     return (

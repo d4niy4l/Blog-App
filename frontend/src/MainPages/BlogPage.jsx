@@ -21,7 +21,6 @@ export default function BlogPage(){
     
     const [cookie] = useCookies([]);
     const jwt = jwtDecode(cookie.jwt);
-    const [error,setError] = useState(false);
     const [like,setLike] = useState(false);
     const [complete,setComplete] = useState(false);
     const container = useRef();
@@ -30,6 +29,7 @@ export default function BlogPage(){
     const [offset, setOffset] = useState(5);
     const [numberComments,setNumberComments] = useState(0);
     const navigate = useNavigate();
+    const apiUrl = process.env.REACT_APP_API_URL;
     const [blog, setBlog] = useState({
         author: '',
         body: '',
@@ -41,7 +41,7 @@ export default function BlogPage(){
     const id = query.get('id');
     const goBack= () => navigate(-1);
     const updateData = async ()=>{
-        const res = await fetch(`http://localhost:5000/comment?offset=${0}&id=${encodeURIComponent(id)}&limit=${offset}`,{
+        const res = await fetch(`${apiUrl}/comment?offset=${0}&id=${encodeURIComponent(id)}&limit=${offset}`,{
             method: 'GET',
         });
         const commentObj = await res.json();
@@ -52,7 +52,7 @@ export default function BlogPage(){
     const fetchData = useCallback(async () => {
         if (isLoading) return;
         setIsLoading(true);
-        const res = await fetch(`http://localhost:5000/comment?offset=${offset}&id=${encodeURIComponent(id)}`,{
+        const res = await fetch(`${apiUrl}/comment?offset=${offset}&id=${encodeURIComponent(id)}`,{
             method: 'GET',
         });
         const commentObj = await res.json();
@@ -67,7 +67,7 @@ export default function BlogPage(){
     const getData = async () => {
         setIsLoading(true);
         try{
-            const res = await fetch(`http://localhost:5000/comment?id=${encodeURIComponent(id)}`,{
+            const res = await fetch(`${apiUrl}/comment?id=${encodeURIComponent(id)}`,{
                 method: 'GET',
             });
                 const commentObj = await res.json();
@@ -85,11 +85,10 @@ export default function BlogPage(){
             if(!cookie.jwt) navigate('/Login');
             try {
  
-                const res = await fetch(`http://localhost:5000/oneBlog?id=${encodeURIComponent(id)}`, {
+                const res = await fetch(`${apiUrl}/oneBlog?id=${encodeURIComponent(id)}`, {
                   method: 'GET'
                 });
                 if(res.status === 400){
-                    setError(true);
                     return;
                 }
                 const result = await res.json();
@@ -97,7 +96,6 @@ export default function BlogPage(){
                 setNumberComments(result.blog.comments.length);                
             }
             catch(err){
-                setError(true);
                 console.log(err);
             }
         }
@@ -119,7 +117,7 @@ export default function BlogPage(){
       const toggle_like = async ()=>{
         const jwt = jwtDecode(cookie.jwt);
         const res = await fetch(
-            `http://localhost:5000/toggle-like?id=${encodeURIComponent(blog.id)}&author_id=${encodeURIComponent(jwt.id)}`,{
+            `${apiUrl}/toggle-like?id=${encodeURIComponent(blog.id)}&author_id=${encodeURIComponent(jwt.id)}`,{
                 method: 'GET'
             }
         );
@@ -143,7 +141,7 @@ export default function BlogPage(){
     useEffect(()=>{
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
+                const response = await fetch(`${apiUrl}/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
                 method: 'GET',
             });
             const result = await response.json();

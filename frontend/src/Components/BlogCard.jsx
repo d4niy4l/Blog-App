@@ -1,6 +1,6 @@
 import { Button} from "@material-tailwind/react";
 import { FaTrashCan } from 'react-icons/fa6';
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
 import { useCookies } from "react-cookie";
@@ -12,12 +12,13 @@ export default function BlogCard(props) {
     const jwt= jwtDecode(cookie.jwt);
     const [like,setLike] = useState(false);
     const [complete,setComplete] = useState(false);
-    const click = (event)=>{
+    const click = ()=>{
         navigate(`/Blog?id=${encodeURIComponent(props.id)}`);
     }
+    const apiUrl = process.env.REACT_APP_API_URL;
     const toggle_like = async ()=>{
         const res = await fetch(
-            `http://localhost:5000/toggle-like?id=${encodeURIComponent(props.id)}&author_id=${encodeURIComponent(jwt.id)}`,{
+            `${apiUrl}/toggle-like?id=${encodeURIComponent(props.id)}&author_id=${encodeURIComponent(jwt.id)}`,{
                 method: 'GET'
             }
         );
@@ -27,7 +28,7 @@ export default function BlogCard(props) {
 
     const delete_blog = async()=>{
         try{
-            const res = await fetch('http://localhost:5000/oneBlog',{
+            const res = await fetch(`${apiUrl}/oneBlog`,{
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

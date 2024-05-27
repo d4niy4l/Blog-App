@@ -27,7 +27,7 @@ export default function UpdateProfile(){
     const query = new URLSearchParams(location.search);
     const username = query.get('username');
     const id = query.get('id');
-    
+    const apiUrl = process.env.REACT_APP_API_URL;
     const [profileData,setProfileData] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [imageUrl,setImageUrl] = useState('');
@@ -53,7 +53,7 @@ export default function UpdateProfile(){
                 console.log("No JWT found in cookies. Redirecting to /Login.");
                 navigate('/Login');
             } else {
-                const res = await fetch('http://localhost:5000/verify', {
+                const res = await fetch(`${apiUrl}/verify`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: {
@@ -76,7 +76,7 @@ export default function UpdateProfile(){
         
             formData.append('user_id', profileData.id);
         
-            const response = await axios.post('http://localhost:5000/pfp', formData, {
+            const response = await axios.post(`${apiUrl}/pfp`, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
               },
@@ -100,7 +100,7 @@ export default function UpdateProfile(){
         
     const uploadBio = async (event)=>{
         event.preventDefault();
-        const result = await fetch('http://localhost:5000/update-bio',{
+        const result = await fetch(`${apiUrl}/update-bio`,{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'
@@ -131,7 +131,7 @@ export default function UpdateProfile(){
             const token = jwtDecode(cookie.jwt);
             if(!token) navigate('/Login');
             const id = token.id;
-            const res = await fetch(`http://localhost:5000/user?username=${encodeURIComponent(username)}`,{
+            const res = await fetch(`${apiUrl}/user?username=${encodeURIComponent(username)}`,{
                 method : 'POST',
             });
             const result = await res.json();
@@ -155,7 +155,7 @@ export default function UpdateProfile(){
     useEffect(()=>{
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
+                const response = await fetch(`${apiUrl}/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
                 method: 'GET',
             });
             const result = await response.json();
@@ -285,9 +285,9 @@ export default function UpdateProfile(){
                     </div>
                     <div className='flex flex-col matchColor gap-5 align-middle justify-center p-5'>
                         <div className='flex flex-col matchColor gap-5 items-center'>
-                            <button class="font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE USERNAME</button>
-                            <button class=" font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE PASSWORD</button>
-                            <button class= " font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE EMAIL</button>
+                            <button className="font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE USERNAME</button>
+                            <button className=" font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE PASSWORD</button>
+                            <button className= " font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE EMAIL</button>
                         </div>
                     </div>
             </div>

@@ -10,7 +10,6 @@ import ProfileCard from "../Components/ProfileCard";
 export default function SearchPage(){
     VerifyUser();
     const location = useLocation();
-    const navigate = useNavigate();
     const query = new URLSearchParams(location.search);
     const type = parseInt(query.get('type'));
     const queryContent = query.get('search');
@@ -18,10 +17,11 @@ export default function SearchPage(){
     const [refresh,setRefresh] = useState(1);
     const [currentPage, setCurrentPage] = useState(1); 
     const [totalPages, setTotalPages] = useState(0); 
+    const apiUrl = process.env.REACT_APP_API_URL
     const limit = 6;
     useEffect(()=>{
         const searchBlogs = async()=>{
-            const res = await fetch(`http://localhost:5000/search-blogs?query=${queryContent}&limit=${encodeURIComponent(limit)}&page=${encodeURIComponent(currentPage)}`,{
+            const res = await fetch(`${apiUrl}/search-blogs?query=${queryContent}&limit=${encodeURIComponent(limit)}&page=${encodeURIComponent(currentPage)}`,{
                 method: 'GET',
             });
             const result = await res.json();
@@ -34,7 +34,7 @@ export default function SearchPage(){
         }
         console.log(type);
         const searchUsers = async()=>{
-            const res = await fetch(`http://localhost:5000/search-users?query=${queryContent}&limit=${encodeURIComponent(limit)}&page=${encodeURIComponent(currentPage)}`,{
+            const res = await fetch(`${apiUrl}/search-users?query=${queryContent}&limit=${encodeURIComponent(limit)}&page=${encodeURIComponent(currentPage)}`,{
                 method: 'GET',
             });
             const result = await res.json();
