@@ -9,7 +9,7 @@ export default function VerifyUser() {
     useEffect(() => {
         const verify_user = async () => {
             if (typeof cookies.jwt !== 'string') {
-                console.log("No JWT found in cookies. Redirecting to /Login.");
+                console.log(typeof cookies.jwt);
                 navigate('/Login');
             } else {
                 try {
