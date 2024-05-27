@@ -23,7 +23,7 @@ export default function DashBoard(){
     })
 
     const [data, setData] = useState([]);
-
+    console.log('dashboard loaded');
     const notifyDeletion = (data_id) => {
       const updated_data = data.filter( data => data.id != data_id);
       setData(updated_data);
@@ -46,7 +46,7 @@ export default function DashBoard(){
       console.error(err);
     }
   }
-   //VerifyUser(); 
+   VerifyUser(); 
     useEffect(() => {
       const fetchData = async () => {
         try {

@@ -38,7 +38,7 @@ export default function LoginForm(props){
                // props.setLogged(result);
                 //localStorage.setItem("user",JSON.stringify(result));
                 //console.log("data: ",result);
-                navigate(`/DashBoard?username=${encodeURIComponent(result.username)}&id=${encodeURIComponent(result.id)}`);
+                navigate(`/DashBoard?username=${encodeURIComponent(result.username)}&id=${encodeURIComponent(result.id)}`,{replace: true});
             }
         }
         catch(error){
