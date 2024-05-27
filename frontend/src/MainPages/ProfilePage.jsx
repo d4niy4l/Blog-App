@@ -46,7 +46,7 @@ export default function ProfilePage(){
     useEffect(()=>{
         const getId_and_compare = async ()=>{
             const token = jwtDecode(cookie.jwt);
-            if(!token) navigate('/Login');
+      
             const id = token.id;
             const res = await fetch(`${apiUrl}/user?username=${encodeURIComponent(username)}`,{
                 method : 'POST',

@@ -15,6 +15,7 @@ const get_profilepicture = async (req, res) => {
 
         } else {
             const image_url = `http://${req.headers.host}/public/pfp.jpg`;
+            console.log(image_url);
             res.status(200).json({url: image_url});
         }
     } catch (error) {

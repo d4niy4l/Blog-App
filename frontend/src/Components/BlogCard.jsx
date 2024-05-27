@@ -3,13 +3,13 @@ import { FaTrashCan } from 'react-icons/fa6';
 import { useNavigate} from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
-import { useCookies } from "react-cookie";
+import { Cookies, useCookies } from "react-cookie";
 import { useState } from "react";
 
 export default function BlogCard(props) {
     const navigate = useNavigate();
-    const [cookie] = useCookies();
-    const jwt= jwtDecode(cookie.jwt);
+    const [cookies] = useCookies();
+    const jwt= jwtDecode(cookies.jwt);
     const [like,setLike] = useState(false);
     const [complete,setComplete] = useState(false);
     const click = ()=>{

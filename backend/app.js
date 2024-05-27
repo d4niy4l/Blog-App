@@ -27,8 +27,14 @@ require('dotenv').config();
 //   }));
   
   app.use((req, res, next) => {
+    const allowedOrigins = ['https://bloggo-five.vercel.app', 'http://localhost:3000']; // Add other allowed origins as needed
     const origin = req.headers.origin;
-    res.setHeader('Access-Control-Allow-Origin', origin);
+
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    } else {
+        res.setHeader('Access-Control-Allow-Origin', '*'); // Fallback to allow all origins
+    }
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
