@@ -162,7 +162,7 @@ export default function UserNavbar(props) {
           id: result.id
         });
         console.log(result);
-       // if(!result.status) navigate('/Login');
+        if(!result.status) navigate('/Login');
         
         return result;
  }
