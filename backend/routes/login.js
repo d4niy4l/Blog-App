@@ -24,7 +24,7 @@ router.route('/').get((req,res)=>{
       withCredentials : true,
       httpOnly: false,
       maxAge: session_age,
-     // \sameSite: "none",
+      sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax",
       secure: process.env.NODE_ENV === 'production',
 
     });
