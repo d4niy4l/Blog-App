@@ -1,6 +1,6 @@
 import React from "react";
 import logo from './../logo.png'
-import {useCookies} from 'react-cookie';
+import Cookies from 'js-cookie'
 import {useNavigate} from 'react-router-dom';
 import {VscArrowUp} from 'react-icons/vsc';
 import {useEffect,useState} from 'react'
@@ -34,11 +34,10 @@ const profileMenuItems = [
 function ProfileMenu() {
   
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [cookie,removeCookie] = useCookies(['jwt']);
   const navigate = useNavigate();
 
   function Logout(){
-      removeCookie("jwt");
+      Cookies.remove('jwt');
       navigate("/login");
   };
   const closeMenu = () => setIsMenuOpen(false);
@@ -125,7 +124,7 @@ export default function UserNavbar(props) {
     id: ''
   });
   const navigate = useNavigate();
-  const [cookie] = useCookies(['jwt']);
+  const jwt = Cookies.get('jwt');
  
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const navListItems = [
@@ -147,7 +146,12 @@ export default function UserNavbar(props) {
   ];
   useEffect(()=>{
     const verify_user = async()=>{
-        console.log(cookie.jwt);
+        const jwt = Cookies.get('jwt');
+        console.log(jwt);
+        if(!jwt){
+          navigate('/Login');
+          return;
+        }
         const res = await fetch('http://localhost:5000/verify',{
             method: 'POST',
             credentials: 'include',
