@@ -8,6 +8,7 @@ import Footer from "../Components/Footer";
 import VerifyUser from "../authPage/VerifyUserHook";
 export default function DashBoard(){
     const location = useLocation();
+    const [data, setData] = useState([]);
     const query = new URLSearchParams(location.search);
     const username = query.get('username');
     const [refreshCount, setRefreshCount] = useState(0);
@@ -21,7 +22,6 @@ export default function DashBoard(){
         author: ''
     })
 
-    const [data, setData] = useState([]);
     console.log('dashboard loaded');
     const notifyDeletion = (data_id) => {
       const updated_data = data.filter( data => data.id != data_id);
@@ -54,7 +54,7 @@ export default function DashBoard(){
           });
           if (res.status === 200) {
             const blog_json = await res.json();
-            const blogs = blog_json.bl1ogs;
+            const blogs = blog_json.blogs;
             setData(blogs);
             console.log(blogs);
           } 
@@ -142,7 +142,7 @@ export default function DashBoard(){
                 required = {true}
               />
             </div>
-            <Button ripple = {true} onClick={submit} disabled = {formData.body.length < 200 || title.current.value.length < 3}>
+            <Button ripple = {true} onClick={submit} disabled = {formData.body?.length < 200 || title.current.value.length < 3}>
               {formData.body.length >= 200 && title.current.value.length >= 3?"POST" : "YOU CAN DEFINITELY WRITE MORE"}</Button>
           </form>
           <small className="text-xs text-black">{wordCount + '/10000'}</small> 
@@ -152,16 +152,16 @@ export default function DashBoard(){
       </div>
       <div className="flex flex-col justify-center align-middle p-2 matchColor rounded-lg">
         <b><h2 className="text-xl text-yellow-300">TOTAL BLOGS POSTED</h2></b>
-        <code className="text-lg text-yellow-300">{data.length}</code>
+        <code className="text-lg text-yellow-300">{data?.length}</code>
       </div>
     </div>
     <div className="flex flex-col items-center gap-3">
       <div className="flex flex-row align-middle">
-        <Button disabled = {data.length === 0}  onClick={deleteAll} className="text-yellow-300 hover:text-red-500 transition-al">DELETE ALL BLOGS</Button>
+        <Button disabled = {data?.length === 0}  onClick={deleteAll} className="text-yellow-300 hover:text-red-500 transition-al">DELETE ALL BLOGS</Button>
       </div>
-      <div className= {`flex flex-col items-center w-fit gap-2  overflow-x-hidden ${data.length === 0 ? "overflow-y-hidden justify-center md:align-middle pl-2" : 
-      data.length < 3 ? 'xxs:justify-start md:justify-center md:align-middle xxs:align-top h-fit overflow-y-hidden' : 'h-96 overflow-y-scroll'}`}>
-            {data.length === 0 ? <b><h1 className="text-xl text-yellow-300 p-3">NO BLOGS POSTED YET</h1></b>: data.map((val)=>{
+      <div className= {`flex flex-col items-center w-fit gap-2  overflow-x-hidden ${data?.length === 0 ? "overflow-y-hidden justify-center md:align-middle pl-2" : 
+      data?.length < 3 ? 'xxs:justify-start md:justify-center md:align-middle xxs:align-top h-fit overflow-y-hidden' : 'h-96 overflow-y-scroll'}`}>
+            {data !== null && data?.length === 0 ? <b><h1 className="text-xl text-yellow-300 p-3">NO BLOGS POSTED YET</h1></b>: data?.map((val)=>{
                 {return <BlogCard body = {val.body} title = {val.title} author = {val.author} likes = {val.likes}
                         id = {val.id} notifyDeletion = {notifyDeletion} key = {1}/>}
             })}
