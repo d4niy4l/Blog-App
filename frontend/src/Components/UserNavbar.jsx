@@ -146,12 +146,6 @@ export default function UserNavbar(props) {
   ];
   useEffect(()=>{
     const verify_user = async()=>{
-        const jwt = Cookies.get('jwt');
-        console.log(jwt);
-        if(!jwt){
-          navigate('/Login');
-          return;
-        }
         const res = await fetch('http://localhost:5000/verify',{
             method: 'POST',
             credentials: 'include',
