@@ -34,7 +34,7 @@ const profileMenuItems = [
 function ProfileMenu() {
   
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [cookie,removeCookie] = useCookies([]);
+  const [cookie,removeCookie] = useCookies(['jwt']);
   const navigate = useNavigate();
 
   function Logout(){
@@ -125,7 +125,8 @@ export default function UserNavbar(props) {
     id: ''
   });
   const navigate = useNavigate();
-  const [cookie] = useCookies([]);
+  const [cookie] = useCookies(['jwt']);
+ 
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const navListItems = [
     {
@@ -146,8 +147,7 @@ export default function UserNavbar(props) {
   ];
   useEffect(()=>{
     const verify_user = async()=>{
-  
-        
+        console.log(cookie.jwt);
         const res = await fetch('http://localhost:5000/verify',{
             method: 'POST',
             credentials: 'include',
