@@ -26,7 +26,7 @@ router.route('/').get((req,res)=>{
       maxAge: session_age,
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
-      domain: "bloggo-five.vercel.app"
+      domain: ".vercel.app"
     });
     return res.status(200).json({username: user[0].username, id: user[0].id});
   } 
