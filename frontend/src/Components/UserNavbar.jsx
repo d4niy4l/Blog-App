@@ -119,12 +119,12 @@ function NavList(props) {
  
 export default function UserNavbar(props) {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [userData,setUserData] = useState({
     username: '',
     id: ''
   });
   const navigate = useNavigate();
-  const jwt = Cookies.get('jwt');
  
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const navListItems = [
@@ -146,7 +146,7 @@ export default function UserNavbar(props) {
   ];
   useEffect(()=>{
     const verify_user = async()=>{
-        const res = await fetch('http://localhost:5000/verify',{
+        const res = await fetch(`${apiUrl}/verify`,{
             method: 'POST',
             credentials: 'include',
             headers: {
