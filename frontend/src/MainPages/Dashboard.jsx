@@ -2,7 +2,6 @@ import React from "react";
 import UserNavbar from "../Components/UserNavbar";
 import { Card, Input, Button} from "@material-tailwind/react";
 import { useState, useRef, useEffect } from "react";
-import {useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import BlogCard  from "../Components/BlogCard";
 import Footer from "../Components/Footer";
@@ -55,7 +54,7 @@ export default function DashBoard(){
           });
           if (res.status === 200) {
             const blog_json = await res.json();
-            const blogs = blog_json.blogs;
+            const blogs = blog_json.bl1ogs;
             setData(blogs);
             console.log(blogs);
           } 

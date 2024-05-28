@@ -207,8 +207,8 @@ export default function BlogPage(){
                 </div>
             </div>
             <div className="flex flex-col gap-5 p-4" ref = {container}>
-                {numberComments > 0 && comments.map((val)=>{
-                    return <CommentCard body = {val.body} author = {val.author} date = {val.date} key = {val.id}/>
+                {numberComments > 0 && comments.map((val,index)=>{
+                    return <CommentCard body = {val.body} author = {val.author} date = {val.date} key = {index}/>
                 })}  
             </div>
             <div className="flex flex-row justify-center align-middle items-center p-7">

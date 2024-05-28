@@ -1,39 +1,46 @@
 import { Button } from "@material-tailwind/react";
 import { FaTrashCan, FaHeart } from 'react-icons/fa6';
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import { useCookies } from "react-cookie";
 import { useState, useEffect } from "react";
 
 export default function BlogCard(props) {
     const navigate = useNavigate();
-    const [cookies] = useCookies(['jwt']);
     const [like, setLike] = useState(false);
     const [complete, setComplete] = useState(false);
     const apiUrl = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        if (props.likes && !complete) {
-            const jwt = cookies.jwt ? jwtDecode(cookies.jwt) : null;
-            if (jwt) {
-                setLike(props.likes.includes(jwt.id));
+        const get_like = async ()=>{
+            const res = await fetch(`${apiUrl}/verify`,{
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            const result = await res.json();
+            console.log()
+            if(result.status === false){
+                alert("SESSION EXPIRED");
+                return;
             }
-            setComplete(true);
+            if (props.likes && !complete) {
+                const id = result.id;
+                setLike(props.likes.includes(id));
+                setComplete(true);
+            }
         }
-    }, [props.likes, complete, cookies]);
+        get_like();
+    }, [props.likes, complete]);
 
     const click = () => {
         navigate(`/Blog?id=${encodeURIComponent(props.id)}`);
     }
 
     const toggle_like = async () => {
-        const jwt = cookies.jwt ? jwtDecode(cookies.jwt) : null;
-        if (!jwt) {
-            console.error("No JWT found");
-            return;
-        }
+       
         try {
-            const res = await fetch(`${apiUrl}/toggle-like?id=${encodeURIComponent(props.id)}&author_id=${encodeURIComponent(jwt.id)}`, {
+            const res = await fetch(`${apiUrl}/toggle-like?id=${encodeURIComponent(props.id)}`, {
                 method: 'GET',
                 credentials: 'include'
             });

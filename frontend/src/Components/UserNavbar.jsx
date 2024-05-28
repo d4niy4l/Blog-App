@@ -159,10 +159,8 @@ export default function UserNavbar(props) {
           username: result.username,
           id: result.id
         });
-        console.log(result);
         if(!result.status) navigate('/Login');
         
-        return result;
  }
  verify_user();
 },[]);

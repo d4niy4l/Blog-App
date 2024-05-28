@@ -1,11 +1,8 @@
 import {Button} from "@material-tailwind/react";
 import { useState,useRef } from "react";
-import {jwtDecode} from 'jwt-decode'
-import { useCookies } from 'react-cookie';
 export function CommentBoxTextarea(props) {
   const [newComment, setNewComment] = useState('');
   const textbox = useRef(null);
-  const [cookie] = useCookies();
   const change = (event)=>{
     const {value} = event.target;
     setNewComment(value);
@@ -14,16 +11,16 @@ export function CommentBoxTextarea(props) {
   const apiUrl = process.env.REACT_APP_API_URL;
   const postComment = async()=>{
     try{ 
-      const jwt= jwtDecode(cookie.jwt);
       const res = await fetch(`${apiUrl}/comment`,{
           method: 'POST',
           headers:{
               'Content-Type': 'application/json'
           },
+          credentials: 'include'
+          ,
           body: JSON.stringify({
             body: newComment,
             id: props.id,
-            author_id: jwt.id
           })
         })
         const result = await res.json();
