@@ -25,7 +25,8 @@ router.route('/').get((req,res)=>{
       httpOnly: false,
       maxAge: session_age,
       sameSite: "none",
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
+
     });
     return res.status(200).json({username: user[0].username, id: user[0].id});
   } 
