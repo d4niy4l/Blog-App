@@ -1,24 +1,12 @@
 const User = require('./../mongoDB/users');
-const jwt = require('jsonwebtoken');
+const {jwtDecode} = require('jwt-decode');
 module.exports.verify_user = async (req,res)=>{
     try{   
         const token = req.cookies.jwt;
-        if(token){
-            jwt.verify(
-                token,
-                "my-32-character-ultra-secure-and-ultra-long-secret",
-                async(err,decoded_token)=>{
-                    if(err){
-                        res.json({status:false});
-                    }
-                    else{
-                        const user = await User.findById(decoded_token.id);
-                        if(user) res.json({status: true, username: user.username, id: user.id});
-                        else res.json({status:false});
-                    }
-                }
-            );
-        }
+        const id = jwtDecode(token).id;
+        console.log('id: ',id);
+        const user = await User.findById(id);
+        if(user) return res.json({status: true, username: user.username, id: user.id});
         else{
             res.json({status:false});
         }
