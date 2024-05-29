@@ -3,6 +3,7 @@ const Image = require('./../mongoDB/profile_picture');
 const User = require('./../mongoDB/users');
 const FS = require('fs');
 const path = require('path');
+const {jwtDecode} = require('jwt-decode')
 const { v4: UUIDV4 } = require('uuid');
 
 const storage = multer.diskStorage({
@@ -18,14 +19,13 @@ const storage = multer.diskStorage({
 const upload_pfp = async (req, res) => {
   try {
     const file = req.file; 
-    const user_id = req.body.user_id; 
+    const user_id = jwtDecode(req.cookies.jwt).id;
     const user = await User.find({_id: user_id});
     if(!user){
       return res.status(404).json({message:'user not found'});
     }
     const image_url = `http://${req.headers.host}/public/${file.filename}`;
     const pfp = await Image.findOne({user: user_id});
-    console.log(pfp);
     if(pfp){
         FS.unlink(path.join(__dirname, '..', pfp.filePath), (err) => {
           if (err) console.error('Error deleting old file:', err);
