@@ -48,6 +48,10 @@ const upload_pfp = async (req, res) => {
     return res.status(200).json({ imageUrl: image_url });
   }catch(err){
       console.log(err);
+      FS.unlink(path.join(__dirname, '..', req.file.filePath), (err) => {
+        if (err) console.error('Error deleting old file:', err);
+        else console.log('Old file deleted:',req.file.filePath);
+      });
       return res.status(500).json({message: 'Internal Server Error'});
   }
 };

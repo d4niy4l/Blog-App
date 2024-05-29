@@ -33,26 +33,25 @@ export default function UpdateProfile(){
         const { value } = event.target;
         setNewBio(value);
     }
-    
-    useEffect(() => {
-        const verify_user = async () => {
-            
-            try {
-                const res = await fetch(`${apiUrl}/verify`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                const result = await res.json();
-                console.log("Verification Result:", result);
-            } catch (error) {
-                console.error(error);
+
+    const removeImage = async ()=>{
+        try {
+            const response = await axios.get(`${apiUrl}/remove-pfp`, {
+              withCredentials: true, // Ensure cookies are included in the request
+            });
+        
+            if (response.status === 200) {
+                const result = await response.json();
+                setImageUrl(result.url);
+                setShowModal(false);
+            } else {
+              console.error('Failed to fetch data');
             }
-        };
-        verify_user();
-    }, [navigate]);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+    }
+
     const uploadImage = async (e) => {
       const file = e.target.files[0]; 
       console.log(file);
@@ -61,12 +60,12 @@ export default function UpdateProfile(){
             const formData = new FormData();
             formData.append('image', file);
         
-            formData.append('user_id', profileData.id);
         
             const response = await axios.post(`${apiUrl}/pfp`, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
               },
+              withCredentials: true
             });
         
             if (response.status === 200) {
@@ -254,7 +253,7 @@ export default function UpdateProfile(){
                                                 Add From Gallery
                                             </button>
                                         </label>
-                                        <button className='p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all'>
+                                        <button onClick = {removeImage} className='p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all'>
                                             Remove Profile Picture
                                         </button>
                                     </div>
