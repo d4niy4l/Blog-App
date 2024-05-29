@@ -5,7 +5,6 @@ import { useState, useRef, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import BlogCard  from "../Components/BlogCard";
 import Footer from "../Components/Footer";
-import VerifyUser from "../authPage/VerifyUserHook";
 export default function DashBoard(){
     const location = useLocation();
     const [data, setData] = useState([]);
@@ -45,7 +44,6 @@ export default function DashBoard(){
       console.error(err);
     }
   }
-   VerifyUser(); 
     useEffect(() => {
       const fetchData = async () => {
         try {

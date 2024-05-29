@@ -4,7 +4,6 @@ module.exports.verify_user = async (req,res)=>{
     try{   
         const token = req.cookies.jwt;
         const id = jwtDecode(token).id;
-        console.log('id: ',id);
         const user = await User.findById(id);
         if(user) return res.json({status: true, username: user.username, id: user.id});
         else{

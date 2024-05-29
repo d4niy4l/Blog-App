@@ -5,7 +5,6 @@ const toggle_like = async (req,res)=>{
         const id = req.query.id;
         const author_id = jwtDecode(req.cookies.jwt).id;
         const blog = await Blog.findOne({id:id});
-        console.log(blog);
         if(!blog){
             return res.status(400).json({message:'blog not found'});
         }

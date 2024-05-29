@@ -6,22 +6,17 @@ import {useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import BlogCard  from "../Components/BlogCard";
 import Footer from "../Components/Footer";
-import VerifyUser from "../authPage/VerifyUserHook";
-import {useCookies} from 'react-cookie';
-import { jwtDecode } from "jwt-decode";
 import { FaRegUser } from "react-icons/fa";
 export default function ProfilePage(){
     const navigate = useNavigate();
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const username = query.get('username');
-    const [cookie] = useCookies();
     const [profileData,setProfileData] = useState({});
     const [data, setData] = useState([]);
     const [imageUrl, setImageUrl] = useState('');
-    const jwt = jwtDecode(cookie.jwt);
     const apiUrl = process.env.REACT_APP_API_URL;
-   VerifyUser(); 
+    const [isOwner, setIsOwner] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,9 +40,7 @@ export default function ProfilePage(){
 
     useEffect(()=>{
         const getId_and_compare = async ()=>{
-            const token = jwtDecode(cookie.jwt);
       
-            const id = token.id;
             const res = await fetch(`${apiUrl}/user?username=${encodeURIComponent(username)}`,{
                 method : 'POST',
             });
@@ -59,8 +52,19 @@ export default function ProfilePage(){
                 id: result.id, 
                 bio: result.bio
             });
-            console.log(profileData.id);
-            console.log(id);
+            const resp = await fetch(`${apiUrl}/verify`,{
+              method: 'POST',
+              credentials: 'include',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+          })
+          const resp_json = await resp.json();
+          if(resp_json.status === false){
+              navigate('/Login'); 
+          }
+          const id = resp_json.id;
+          setIsOwner(id === result.id);
         }
         getId_and_compare();
        
@@ -68,7 +72,7 @@ export default function ProfilePage(){
     useEffect(()=>{
       const fetchData = async () => {
           try {
-              const response = await fetch(`${apiUrl}/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
+              const response = await fetch(`${apiUrl}/pfp?username=${encodeURIComponent(username)}`, {
               method: 'GET',
           });
           const result = await response.json();
@@ -99,7 +103,7 @@ export default function ProfilePage(){
               </div>
             </div>
 
-            {profileData.id === jwtDecode(cookie.jwt).id ? <div className="flex flex-row justify-center">
+            {isOwner ? <div className="flex flex-row justify-center">
                 <Button onClick={()=>navigate(`/Update?username=${encodeURIComponent(profileData.username)}&id=${encodeURIComponent(profileData.id)}`)}
                  className="text-yellow-300 hover:text-red-700 transition-all hover:scale-105">EDIT PROFILE</Button>
             </div> : <hr/>} 
@@ -114,13 +118,28 @@ export default function ProfilePage(){
       </div>
     </div>
     <div className="flex flex-col items-center gap-3">
-      <div className= {`flex flex-col items-center w-fit gap-2 overflow-x-hidden ${data.length === 0 ? "justify-center md:align-middle pl-2" : 
-      data.length < 3 ? 'xxs:justify-start md:justify-center md:align-middle xxs:align-top h-fit overflow-x-hidden' : 'h-96 overflow-y-scroll'}`}>
-            {data.length === 0 ? <b><h1 className="text-xl text-yellow-300 p-3">NO BLOGS POSTED YET</h1></b>: data.map((val,index)=>{
-                return <BlogCard body = {val.body} title = {val.title} author = {val.author} id = {val.id}  key = {index} likes = {val.likes}/>
-            })}
-      </div>
+    <div className={`mx-auto max-w-screen-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 ${
+        data.length === 0 ? "justify-center md:align-middle pl-2" : 
+        data.length < 3 ? 'justify-center items-center h-fit overflow-x-hidden' : 'h-96 overflow-y-scroll'
+    }`}>
+        {data.length === 0 ? (
+            <b><h1 className="text-xl text-yellow-300 p-3">NO BLOGS POSTED YET</h1></b>
+        ) : (
+            data.map((val, index) => (
+                <BlogCard 
+                    body={val.body} 
+                    title={val.title} 
+                    author={val.author} 
+                    id={index} 
+                    key={val.id} 
+                    likes={val.likes}
+                />
+            ))
+        )}
     </div>
+</div>
+
+
   </div>
     <Footer/>
 </div>

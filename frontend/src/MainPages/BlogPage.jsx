@@ -7,7 +7,6 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { GoComment } from 'react-icons/go'
 import { FaHeart } from "react-icons/fa";
 import { IconContext } from "react-icons";
-import VerifyUser from "../authPage/VerifyUserHook";
 import {GiNotebook} from 'react-icons/gi'
 import Footer from "../Components/Footer";
 import {debounce} from 'lodash'
@@ -88,7 +87,13 @@ export default function BlogPage(){
                 }
                 const result = await res.json();
                 setBlog(result.blog);
-                setNumberComments(result.blog.comments.length);          
+                setNumberComments(result.blog.comments.length);      
+                const response = await fetch(`${apiUrl}/pfp?username=${encodeURIComponent(result.blog.author)}`, {
+                method: 'GET',
+                });
+                const imageData = await response.json();
+                setImageUrl(imageData.url);
+                   
                 const resp = await fetch(`${apiUrl}/verify`,{
                     method: 'POST',
                     credentials: 'include',
@@ -98,10 +103,9 @@ export default function BlogPage(){
                 })
                 const resp_json = await resp.json();
                 if(resp_json.status === false){
-                    console.log('aa');
+                    navigate('/Login'); 
                 }
                 const id = resp_json.id;
-                console.log(id);
                 setLike(result.blog.likes.includes(id));
                
             }
@@ -160,25 +164,12 @@ export default function BlogPage(){
         setComplete(true);
     }
     const [imageUrl, setImageUrl] = useState('');
-    useEffect(()=>{
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/pfp`, {
-                method: 'GET',
-                credentials: 'include'
-            });
-            const result = await response.json();
-            setImageUrl(result.url);
-            } catch (error) {
-                console.error('Error fetching image:', error);
-            }
-        };
-        fetchData();
-    },[]);
-    VerifyUser();
+    
     const writtenBy =  (<div className="flex flex-col items-center">
-                            {imageUrl ? <img src = {imageUrl} alt="pfp" width={35} height={35} className="rounded-full"/> : <FaRegUser color="yellow" size={30} />}
-                            <button onClick={navigateToUser} className="hover:text-red-700 transition-colors">{blog.author}</button>
+                            <button onClick={navigateToUser} className="hover:text-red-700 transition-colors">
+                            {imageUrl ? <img src = {imageUrl} alt="pfp" width={55} height={55} className="rounded-full"/> : <FaRegUser color="yellow" size={30} />}
+                                <h1>{blog.author}</h1>
+                            </button>
                         </div>);
     return(
         <div className="flex flex-col align-middle justify-center overflow-x-hidden">

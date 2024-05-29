@@ -1,6 +1,5 @@
 
 const Blog = require('./../mongoDB/blog');
-const {log} = require('console');
 const get_all_blogs = async (req,res)=>{
     try{
         const page = parseInt(req.query.page) || 1; 

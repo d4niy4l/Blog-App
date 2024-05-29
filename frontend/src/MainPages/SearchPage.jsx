@@ -1,14 +1,12 @@
-import VerifyUser from "../authPage/VerifyUserHook";
 import Footer from "../Components/Footer";
 import UserNavbar from "../Components/UserNavbar";
 import BlogCard from "../Components/BlogCard";
 import logo from './../logo.png'
 import Pagination from "../Components/Pagination";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation} from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import ProfileCard from "../Components/ProfileCard";
 export default function SearchPage(){
-    VerifyUser();
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const type = parseInt(query.get('type'));

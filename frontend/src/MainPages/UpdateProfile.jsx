@@ -1,7 +1,6 @@
 import UserNavbar from './../Components/UserNavbar';
 import Footer from './../Components/Footer';
 import { useLocation, useNavigate } from 'react-router-dom'
-import VerifyUser from '../authPage/VerifyUserHook';
 import { jwtDecode } from 'jwt-decode';
 import { useCookies } from 'react-cookie';
 import { useEffect, useState, useRef } from 'react';
@@ -18,7 +17,6 @@ function changeUsernameForm(){
 }
 
 export default function UpdateProfile(){
-    VerifyUser();
     const navigate = useNavigate();
     const [cookie] = useCookies();
     const location = useLocation();

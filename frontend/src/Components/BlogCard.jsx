@@ -7,7 +7,23 @@ export default function BlogCard(props) {
     const navigate = useNavigate();
     const [like, setLike] = useState(false);
     const [complete, setComplete] = useState(false);
+    const [imageUrl, setImageUrl] = useState('');
     const apiUrl = process.env.REACT_APP_API_URL;
+
+    useEffect(()=>{
+        const getPfp = async()=>{
+            try {
+                const response = await fetch(`${apiUrl}/pfp?username=${encodeURIComponent(props.author)}`, {
+                    method: 'GET',
+                });
+                const imageData = await response.json();
+                setImageUrl(imageData.url);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        getPfp();
+    },[])
 
     useEffect(() => {
         const get_like = async ()=>{
@@ -88,11 +104,12 @@ export default function BlogCard(props) {
                 </button>
             </div>
             {props.main && (
-                <code>
-                    <p className="text-yellow-300 text-lg flex flex-row align-middle justify-center gap-1">
-                        By <button onClick={() => { navigate(`/Profile?username=${props.author}`) }}>{props.author}</button>
-                    </p>
-                </code>
+                    <button onClick={() => { navigate(`/Profile?username=${props.author}`) }} className="flex items-center flex-col  text-yellow-300 hover:text-red-600 hover:scale-105 transition-all">
+                        <img src = {imageUrl} alt = 'pfp' className="rounded-full" width = {50} height = {50}/>
+                        <h1 className="font-semibold text-lg flex flex-row align-middle justify-center gap-1">
+                            {props.author}
+                        </h1>
+                    </button>
             )}
             <div className="flex flex-col gap-1.5">
                 <div className="flex justify-center align-middle">
