@@ -1,8 +1,6 @@
 import UserNavbar from './../Components/UserNavbar';
 import Footer from './../Components/Footer';
 import { useLocation, useNavigate } from 'react-router-dom'
-import { jwtDecode } from 'jwt-decode';
-import { useCookies } from 'react-cookie';
 import { useEffect, useState, useRef } from 'react';
 import { FaRegUser } from "react-icons/fa";
 
@@ -18,7 +16,6 @@ function changeUsernameForm(){
 
 export default function UpdateProfile(){
     const navigate = useNavigate();
-    const [cookie] = useCookies();
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const username = query.get('username');
@@ -32,23 +29,15 @@ export default function UpdateProfile(){
     const [dimensions, setDimensions] = useState({});
     const bio_ref = useRef(null);   
    
-    const jwt = jwtDecode(cookie.jwt);                         
     const bioOnChange = (event)=>{
         const { value } = event.target;
         setNewBio(value);
     }
-    if(id !== jwt.id){
-        alert('Invalid Token');
-        navigate('/Login');
-    }
     
     useEffect(() => {
-        console.log('hello')
         const verify_user = async () => {
-            if (typeof cookie.jwt !== 'string') {
-                console.log("No JWT found in cookies. Redirecting to /Login.");
-                navigate('/Login');
-            } else {
+            
+            try {
                 const res = await fetch(`${apiUrl}/verify`, {
                     method: 'POST',
                     credentials: 'include',
@@ -58,10 +47,12 @@ export default function UpdateProfile(){
                 });
                 const result = await res.json();
                 console.log("Verification Result:", result);
+            } catch (error) {
+                console.error(error);
             }
         };
         verify_user();
-    }, [cookie, navigate]);
+    }, [navigate]);
     const uploadImage = async (e) => {
       const file = e.target.files[0]; 
       console.log(file);
@@ -81,7 +72,7 @@ export default function UpdateProfile(){
             if (response.status === 200) {
               const result = response.data; // Assuming the server returns JSON data
               setImageUrl(result.imageUrl);
-              console.log(result);
+              setShowModal(false);
             } else {
               alert('Unexpected error, please login again');
               navigate('/Login');
@@ -122,11 +113,7 @@ export default function UpdateProfile(){
 
 
     useEffect(() => {
-        if(!cookie.jwt)  navigate('/Login');
         const getUserData = async ()=>{
-            const token = jwtDecode(cookie.jwt);
-            if(!token) navigate('/Login');
-            const id = token.id;
             const res = await fetch(`${apiUrl}/user?username=${encodeURIComponent(username)}`,{
                 method : 'POST',
             });
@@ -151,8 +138,9 @@ export default function UpdateProfile(){
     useEffect(()=>{
         const fetchData = async () => {
             try {
-                const response = await fetch(`${apiUrl}/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
+                const response = await fetch(`${apiUrl}/pfp`, {
                 method: 'GET',
+                credentials: 'include'
             });
             const result = await response.json();
             setImageUrl(result.url);
@@ -266,7 +254,9 @@ export default function UpdateProfile(){
                                                 Add From Gallery
                                             </button>
                                         </label>
-                                        <button className='p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all'>Remove Profile Picture</button>
+                                        <button className='p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all'>
+                                            Remove Profile Picture
+                                        </button>
                                     </div>
                                 </div>
                                 </div>

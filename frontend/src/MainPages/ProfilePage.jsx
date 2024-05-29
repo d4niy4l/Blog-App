@@ -130,8 +130,8 @@ export default function ProfilePage(){
                     body={val.body} 
                     title={val.title} 
                     author={val.author} 
-                    id={index} 
-                    key={val.id} 
+                    id={val.id} 
+                    key={index} 
                     likes={val.likes}
                 />
             ))

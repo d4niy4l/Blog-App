@@ -4,6 +4,7 @@ const {jwtDecode} = require('jwt-decode')
 
 const get_profilepicture = async (req, res) => {
     try {
+        console.log(req.cookies)
         if(req.cookies.jwt === undefined){
             const username = req.query.username;
             const user = await User.findOne({username: username});
@@ -16,11 +17,11 @@ const get_profilepicture = async (req, res) => {
 
             } else {
                 const image_url = `http://${req.headers.host}/public/pfp.jpg`;
-                console.log(image_url);
                 res.status(200).json({url: image_url});
             }
         }
         else{
+            console.log('hello');
             const userId = jwtDecode(req.cookies.jwt).id;
             const user = await User.findById(userId);
 
