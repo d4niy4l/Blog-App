@@ -40,7 +40,7 @@ export default function DashBoard(){
         if(res.ok){          
           setData([]);
         }
-    }
+    }  
     catch(err){
       console.error(err);
     }
@@ -120,23 +120,23 @@ export default function DashBoard(){
   <div className="flex md:flex-row xxs:flex-col w-screen gap-5 justify-center align-middle">
     <div className="flex flex-col justify-center align-middle gap-3">
       <div className="flex flex-col">
-        <Card className="flex flex-col py-7 px-5 gap-3 matchColor">
+        <Card className="flex flex-col py-7 px-5 gap-3 matchColor md:w-600">
           <form className="flex flex-col gap-5">
             <div>
               <Input 
               type="textarea" label="Title"
-              inputRef={title}
+              inputRef={title} 
               required = {true}
               className="text-yellow-300"
               onChange={handleChange}
               />
             </div>
-            <div className="w-cover">
+            <div className="w-full">
               <textarea
                 placeholder="Start writing...."
                 name="body"
                 maxLength={10000}
-                className="matchColor w-400 rounded-lg resize-y overflow-hidden text-yellow-300"
+                className="matchColor w-full rounded-lg resize-y overflow-hidden text-yellow-300"
                 onInput={handleChange}
                 ref = {body}
                 required = {true}

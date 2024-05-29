@@ -1,10 +1,9 @@
 const Blog = require("../mongoDB/blog");
-
+const {jwtDecode} = require('jwt-decode')
 const toggle_like = async (req,res)=>{
     try{
         const id = req.query.id;
-        const author_id = req.cookies.jwt;
-        console.log(id);
+        const author_id = jwtDecode(req.cookies.jwt).id;
         const blog = await Blog.findOne({id:id});
         console.log(blog);
         if(!blog){

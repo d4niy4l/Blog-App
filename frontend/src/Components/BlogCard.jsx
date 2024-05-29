@@ -19,13 +19,13 @@ export default function BlogCard(props) {
                 },
             })
             const result = await res.json();
-            console.log()
             if(result.status === false){
                 alert("SESSION EXPIRED");
                 return;
             }
             if (props.likes && !complete) {
                 const id = result.id;
+                console.log('user id: ',id);
                 setLike(props.likes.includes(id));
                 setComplete(true);
             }

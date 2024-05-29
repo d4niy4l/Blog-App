@@ -1,10 +1,10 @@
 const Image = require('./../mongoDB/profile_picture');
 const User = require('./../mongoDB/users');
-
+const {jwtDecode} = require('jwt-decode')
 
 const get_profilepicture = async (req, res) => {
     try {
-        const userId = req.query.user_id;
+        const userId = jwtDecode(req.cookies.jwt).id;
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).send('User not found');

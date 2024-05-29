@@ -2,7 +2,6 @@ import { useEffect,useState,useCallback, useRef } from "react";
 import UserNavbar from "../Components/UserNavbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card, Button } from "@material-tailwind/react";
-import {useCookies} from 'react-cookie'
 import { CommentBoxTextarea } from "../Components/CommentBoxTextarea";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { GoComment } from 'react-icons/go'
@@ -13,14 +12,11 @@ import {GiNotebook} from 'react-icons/gi'
 import Footer from "../Components/Footer";
 import {debounce} from 'lodash'
 import CommentCard from "../Components/CommentCard";
-import { jwtDecode } from "jwt-decode";
 import { FaRegUser } from "react-icons/fa";
 
 
 export default function BlogPage(){
     
-    const [cookie] = useCookies([]);
-    const jwt = jwtDecode(cookie.jwt);
     const [like,setLike] = useState(false);
     const [complete,setComplete] = useState(false);
     const container = useRef();
@@ -82,18 +78,32 @@ export default function BlogPage(){
     }, []);
     useEffect(()=>{
         const getBlog = async()=>{
-            if(!cookie.jwt) navigate('/Login');
             try {
- 
-                const res = await fetch(`${apiUrl}/oneBlog?id=${encodeURIComponent(id)}`, {
-                  method: 'GET'
+                const blog_id = query.get('id');
+                const res = await fetch(`${apiUrl}/oneBlog?id=${encodeURIComponent(blog_id)}`, {
+                method: 'GET',
                 });
                 if(res.status === 400){
                     return;
                 }
                 const result = await res.json();
                 setBlog(result.blog);
-                setNumberComments(result.blog.comments.length);                
+                setNumberComments(result.blog.comments.length);          
+                const resp = await fetch(`${apiUrl}/verify`,{
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                const resp_json = await resp.json();
+                if(resp_json.status === false){
+                    console.log('aa');
+                }
+                const id = resp_json.id;
+                console.log(id);
+                setLike(result.blog.likes.includes(id));
+               
             }
             catch(err){
                 console.log(err);
@@ -114,35 +124,48 @@ export default function BlogPage(){
           window.removeEventListener("scroll", handleScroll);
         };
       }, [fetchData]);
+      
       const toggle_like = async ()=>{
-        const jwt = jwtDecode(cookie.jwt);
-        const res = await fetch(
-            `${apiUrl}/toggle-like?id=${encodeURIComponent(blog.id)}&author_id=${encodeURIComponent(jwt.id)}`,{
-                method: 'GET'
+        try {
+            const res = await fetch(`${apiUrl}/toggle-like?id=${encodeURIComponent(id)}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            if (res.status === 200) {
+                const resp = await fetch(`${apiUrl}/verify`,{
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                const result = await resp.json();
+                if(like){
+                    const index = blog.likes.indexOf(result.id);
+                    blog.likes.splice(index,1);
+                }
+                else{
+                    blog.likes.push(result.id);
+                }
+                setLike(!like);
+            } else {
+                console.error("Failed to toggle like");
             }
-        );
-        if(res.status === 200){
-            if(like){
-                const index = blog.likes.indexOf(jwt.id);
-                blog.likes.splice(index,1);
-            }
-            else{
-                blog.likes.push(jwt.id);
-            }
-            setLike(!like);
-
+        } catch (error) {
+            console.error("Error toggling like:", error);
         }
     }
     if(blog.likes && complete === false){
-        setLike(blog.likes.includes(jwt.id));
+        setLike(blog.likes.includes());
         setComplete(true);
     }
     const [imageUrl, setImageUrl] = useState('');
     useEffect(()=>{
         const fetchData = async () => {
             try {
-                const response = await fetch(`${apiUrl}/pfp?user_id=${encodeURIComponent(jwt.id)}`, {
+                const response = await fetch(`${apiUrl}/pfp`, {
                 method: 'GET',
+                credentials: 'include'
             });
             const result = await response.json();
             setImageUrl(result.url);
@@ -162,7 +185,6 @@ export default function BlogPage(){
             <UserNavbar query = "Search Blogs"/>
             <div className="matchColor flex align-middle justify-center flex-col items-center w-screen rounded-xl">
                 <div className = "flex flex-col gap-2 justify-center items-center h-fit rounded-none overflow-hidden border-b-black border-b-4 pt-5 pb-10 text-white" 
-                //style = {/*{backgroundImage: `url('https://c4.wallpaperflare.com/wallpaper/217/640/970/technology-discord-wallpaper-preview.jpg')`}*/}
                 >
                     <div className="flex flex-row justify-between items-center">
                         <div className="flex flex-row gap-5 justify-center p-3">
