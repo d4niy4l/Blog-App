@@ -27,6 +27,7 @@ const upload_pfp = async (req, res) => {
     const image_url = `http://${req.headers.host}/public/${file.filename}`;
     const pfp = await Image.findOne({user: user_id});
     if(pfp){
+        console.log('hello');
         FS.unlink(path.join(__dirname, '..', pfp.filePath), (err) => {
           if (err) console.error('Error deleting old file:', err);
           else console.log('Old file deleted:', pfp.filePath);
