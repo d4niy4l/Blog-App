@@ -1,18 +1,12 @@
 import UserNavbar from './../Components/UserNavbar';
 import Footer from './../Components/Footer';
+import Modal from '../Components/Modal';
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react';
 import { FaRegUser } from "react-icons/fa";
 
 import axios from 'axios';
 
-function changeUsernameForm(){
-    return(
-        <div>
-
-        </div>
-    )
-}
 
 export default function UpdateProfile(){
     const navigate = useNavigate();
@@ -54,13 +48,10 @@ export default function UpdateProfile(){
 
     const uploadImage = async (e) => {
       const file = e.target.files[0]; 
-      console.log(file);
       if (file){
           try {
             const formData = new FormData();
             formData.append('image', file);
-        
-        
             const response = await axios.post(`${apiUrl}/pfp`, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',

@@ -15,8 +15,10 @@ const like_toggler = require('./routes/toggle_likes');
 const pfp = require('./routes/profilepicture');
 const update_bio = require('./routes/update_bio');
 const remove_pfp = require('./routes/remove-pfp');
+const logout = require('./routes/logout');
 const path = require('path');
 const app = express();
+
 require('dotenv').config();
 
   
@@ -64,4 +66,5 @@ app.use('/toggle-like',like_toggler);
 app.use('/pfp',pfp);
 app.use('/update-bio',update_bio);
 app.use('/remove-pfp',remove_pfp);
+app.use('/logout',logout);
 //upload pfp

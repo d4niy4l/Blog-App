@@ -17,9 +17,7 @@ router.route('/').get((req,res)=>{
     if(!user.length) return res.status(409).json({message: 'INCORRECT USERNAME OR PASSWORD'});
     const passwordMatch = await bcrypt.compare(password,user[0].password);
     if(!passwordMatch) return res.status(409).json({message: 'INCORRECT USERNAME OR PASSWORD'});
-    //console.log(user[0].id);
     const token = create_token(user[0].id);
-    console.log(user[0].id);
     res.cookie("jwt",token,{
       withCredentials : true,
       httpOnly: false,

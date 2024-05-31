@@ -36,9 +36,13 @@ function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const navigate = useNavigate();
 
-  function Logout(){
-      Cookies.remove('jwt');
-      navigate("/login");
+  async function Logout(){
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/logout`,{
+        method: 'GET',
+        credentials: 'include'
+      })
+      if(res.status === 200)
+        navigate("/login");
   };
   const closeMenu = () => setIsMenuOpen(false);
    
