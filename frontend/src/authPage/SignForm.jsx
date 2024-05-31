@@ -39,9 +39,8 @@ export default function SignForm(){
         return result.length > 0 ? `Password requires atleast one ` + result  : '';
       }
     const verifyPassword = () =>{
-        if(passwordConfirm.current.value !== password.current.value) 
-            setPassMatch(false);
-        setPassMatch(true);
+        setPassMatch(passwordConfirm.current.value === password.current.value);
+        return passwordConfirm.current.value === password.current.value;
     }
     const submit = async(event)=>{
         event.preventDefault();
@@ -59,8 +58,8 @@ export default function SignForm(){
         else setValidEmail(true);
         if(username.current.value.length === 0) setValidName(false);
         else setValidName(true);
-        verifyPassword();
-        if(!validEmail || !validName || !validPass || !passMatch) return;
+       
+        if(!isValidEmail(email.current.value) || username.current.value.length === 0 || match.length > 0 || !verifyPassword()) return;
         const formData = {
             username: username.current.value,
             password: password.current.value,
