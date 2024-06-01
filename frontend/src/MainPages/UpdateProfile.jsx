@@ -1,6 +1,7 @@
 import UserNavbar from './../Components/UserNavbar';
 import Footer from './../Components/Footer';
 import EmailChanger from './../Components/EmailChanger';
+import PasswordChanger from './../Components/PasswordChanger';
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react';
 import { FaRegUser } from "react-icons/fa";
@@ -262,7 +263,7 @@ export default function UpdateProfile(){
                     <div className='flex flex-col matchColor gap-5 align-middle justify-center p-5'>
                         <div className='flex flex-col matchColor gap-5 items-center'>
                             <EmailChanger/>
-                            <button className= " font-semibold text-yellow-300 text-lg p-3 bg-gray-800 rounded-lg hover:scale-105 hover:bg-slate-600 transition-all">CHANGE EMAIL</button>
+                            <PasswordChanger/>
                         </div>
                     </div>
             </div>

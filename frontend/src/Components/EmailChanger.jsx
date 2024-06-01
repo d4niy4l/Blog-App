@@ -32,24 +32,33 @@ export default function Modal({children,title}) {
                         </div>
                     </button>
                 </div>
-                <div className='flex flex-row gap-2 justify-between p-4'>
-                    <form>
+                <div className='flex flex-row gap-3 p-4 align-middle justify-center'>
+                    <form className="flex flex-col gap-3 align-middle justify-center">
                       <Input 
                       label = 'Enter New Email' 
                       color = 'yellow'
                       labelProps={{
-                        className: "text-yellow",
+                        className: "text-white",
                       }}
-                      containerProps={{ className: "text-yellow" }}
+                      containerProps={{ className: "text-white" }}
                       /> 
-                      <Input label =  'Enter Password' color = 'yellow'/>
-                      <button
-                      className="bg-gray-800 text-yellow-300 active:bg-gray-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button"
-                      
-                    >
-                      Enter
-                    </button>
+                      <Input 
+                      label =  'Enter Password' 
+                      color = 'yellow'
+                      labelProps={{
+                        className: "text-white",
+                      }}
+                      containerProps={{ className: "text-white" }}
+                      />
+                      <div className="flex justify-center align-middle">
+                        <button
+                        className=" w-fit bg-gray-800 text-yellow-300 active:bg-gray-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button"
+                        
+                      >
+                        Enter
+                      </button>
+                      </div>
                     </form>
                 </div>
               </div>
