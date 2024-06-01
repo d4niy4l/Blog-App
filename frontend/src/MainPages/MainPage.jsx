@@ -4,6 +4,7 @@ import UserNavbar from "../Components/UserNavbar";
 import BlogCard from "../Components/BlogCard";
 import logo from './../logo.png'
 import Pagination from "../Components/Pagination";
+
 export default function MainPage(){
     const [blogs, setBlogs] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); 

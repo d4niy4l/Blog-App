@@ -1,11 +1,11 @@
 import {Route,Routes} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './App.css';
-import Login from './authPage/Login';
-import SignIn from './authPage/SignIn';
+import Login from './AuthorizationPages/Login';
+import SignIn from './AuthorizationPages/SignIn';
 import LandingPage from './MainPages/LandingPage'
 import DashBoard from './MainPages/Dashboard';
-import RegisteredPage from './confirmationPages/RegisteredPage';
+import RegisteredPage from './AuthorizationPages/RegisteredPage';
 import BlogPage from './MainPages/BlogPage';
 import ProfilePage from './MainPages/ProfilePage'
 import MainPage from './MainPages/MainPage';

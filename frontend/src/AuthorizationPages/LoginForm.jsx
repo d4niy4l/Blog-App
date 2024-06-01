@@ -4,14 +4,15 @@ import logo from './../logo.png'
 import { Link,useNavigate } from 'react-router-dom';
 import {Input, Button} from '@material-tailwind/react'
 import React from "react";
+import { FaRegEye } from "react-icons/fa";
 
 export default function LoginForm(props){
     const navigate = useNavigate();
     const[exists,setExist] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const username = useRef(null);
     const password = useRef(null);
     const apiUrl = process.env.REACT_APP_API_URL;
-    console.log(apiUrl);
     const handleSubmit = async(event)=>{
         try{
             event.preventDefault();
@@ -26,7 +27,6 @@ export default function LoginForm(props){
                 credentials: 'include',
                 body: JSON.stringify(formData)
             })
-            console.log('poop');
             const result = await res.json();
             if(res.status === 409){
                 console.log('error in login');
@@ -35,9 +35,7 @@ export default function LoginForm(props){
             else if (res.status === 200){
                 setExist("");
                 props.log(true);
-               // props.setLogged(result);
-                //localStorage.setItem("user",JSON.stringify(result));
-                console.log("data: ",result);
+              
                 navigate(`/DashBoard?username=${encodeURIComponent(result.username)}&id=${encodeURIComponent(result.id)}`,{replace: true});
             }
         }
@@ -57,23 +55,41 @@ export default function LoginForm(props){
                     <h1>WELCOME BACK</h1>
                 </div>
                 <div className="flex w-auto flex-col gap-7 align-middle items-center">
-                    <div className="w-50 text-cyan-50">
+                    <div className="w-60 text-cyan-50">
                         <Input label="Username" className = ' text-white'
                         type = 'text' inputRef={username}
                         labelProps={{
                             className: "text-white",
                         }}
                         containerProps={{ className: "text-white" }}
+                        color = 'white'
                         />
                     </div>
-                    <div className="w-50">
-                        <Input label="Password"  className = ' text-white'
+                    <div className="w-50  text-cyan-50 flex flex-row justify-end gap-3">
+                       {showPassword === false ? 
+                       <Input label="Password"  className = ' text-white'
                         type = 'password' inputRef={password}
                         labelProps={{
                             className: "text-white",
                         }}
                         containerProps={{ className: "text-white" }}
-                        />
+                        color = 'white'
+                        /> 
+                        :
+                        <Input label="Password"  className = ' text-white'
+                        type = 'text' inputRef={password}
+                        labelProps={{
+                            className: "text-white",
+                        }}
+                        containerProps={{ className: "text-white" }}
+                        color = 'white'
+                        /> 
+                        
+                        
+                        }
+                        <button onClick={()=>setShowPassword(!showPassword)}  type="button">
+                            <FaRegEye size={20} color = {showPassword ? 'red' : 'white'} className='transition-all'/>
+                        </button>
                     </div>
                     <div className="flex w-max gap-4">
                         <Button ripple={true} onClick={handleSubmit}>LOGIN</Button>
